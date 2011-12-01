@@ -64,14 +64,14 @@ nant -buildfile:SharpCvsLib.build netdoc ||:
 
 
 %install
-%{__rm} -rf $RPM_BUILD_ROOT
-%{__mkdir_p} $RPM_BUILD_ROOT/%_datadir/pkgconfig
-cp %{S:1} $RPM_BUILD_ROOT/%_datadir/pkgconfig
-%{__mkdir_p} $RPM_BUILD_ROOT/%_prefix/lib/mono/gac/
-gacutil -i src/bin/cvs.exe -f -package sharpcvslib -root ${RPM_BUILD_ROOT}/%_prefix/lib/
-gacutil -i src/bin/ICSharpCode.SharpCvsLib.dll -f -package sharpcvslib -root ${RPM_BUILD_ROOT}/%_prefix/lib
-gacutil -i src/bin/ICSharpCode.SharpCvsLib.Tests.dll -f -package sharpcvslib -root ${RPM_BUILD_ROOT}/%_prefix/lib
-gacutil -i src/bin/ICSharpCode.SharpCvsLib.Tests-sample.dll -f -package sharpcvslib -root ${RPM_BUILD_ROOT}/%_prefix/lib
+%{__rm} -rf %{buildroot}
+%{__mkdir_p} %{buildroot}/%_datadir/pkgconfig
+cp %{S:1} %{buildroot}/%_datadir/pkgconfig
+%{__mkdir_p} %{buildroot}/%_prefix/lib/mono/gac/
+gacutil -i src/bin/cvs.exe -f -package sharpcvslib -root %{buildroot}/%_prefix/lib/
+gacutil -i src/bin/ICSharpCode.SharpCvsLib.dll -f -package sharpcvslib -root %{buildroot}/%_prefix/lib
+gacutil -i src/bin/ICSharpCode.SharpCvsLib.Tests.dll -f -package sharpcvslib -root %{buildroot}/%_prefix/lib
+gacutil -i src/bin/ICSharpCode.SharpCvsLib.Tests-sample.dll -f -package sharpcvslib -root %{buildroot}/%_prefix/lib
 
 # Cleanup docs
 %{__sed} -i 's/\r//' src/doc/api/msdn/SharpCvsLib.log
@@ -83,7 +83,7 @@ iconv -f iso-8859-1 -t utf-8 -o src/doc/api/msdn/tree.js{.utf8,}
 mv src/doc/api/msdn/tree.js{.utf8,}
 
 %clean
-%{__rm} -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
