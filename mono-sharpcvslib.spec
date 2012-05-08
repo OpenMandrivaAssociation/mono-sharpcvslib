@@ -1,6 +1,6 @@
 Name:		mono-sharpcvslib
 Version:	0.35
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	Client cvs library written in C#
 URL:		http://sharpcvslib.sourceforge.net/
 # Exception: Permission is given to use this library in commercial closed-source applications
