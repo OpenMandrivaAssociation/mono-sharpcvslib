@@ -1,0 +1,2914 @@
+diff -up sharpcvslib-0.35/src/build/SharpCvsLib.build.cleanups sharpcvslib-0.35/src/build/SharpCvsLib.build
+--- sharpcvslib-0.35/src/build/SharpCvsLib.build.cleanups	2004-02-21 01:22:54.000000000 -0500
++++ sharpcvslib-0.35/src/build/SharpCvsLib.build	2008-04-10 10:09:33.000000000 -0400
+@@ -19,7 +19,7 @@
+ 
+     <target name="update.version" description="Generate the assembly info file for the project.  Pass in the version number.">
+         <!-- Gets the version number and places it in a property called build.version -->
+-        <ifnot propertyexists="assembly.version">
++        <if test="${not property::exists('assembly.version')}"> 
+             <version    buildtype="monthday" 
+                         path="build.number" 
+                         revisiontype="automatic" 
+@@ -48,7 +48,7 @@
+                     <includes name="System.EnterpriseServices.dll" />
+                 </references>
+             </asminfo>    
+-        </ifnot>    
++        </if>    
+     </target>
+     
+     <target name="setup">
+@@ -56,30 +56,28 @@
+         <mkdir dir="${dir.bin}/tests" />
+         <copy todir="${dir.bin}">
+             <fileset basedir="${dir.lib}">
+-                <includes name="${lib.zip}" />
++                <include name="${lib.zip}" />
+             </fileset>
+         </copy>        
+         <copy todir="${dir.bin}">
+             <fileset basedir="${dir.lib.ext}">
+-                <includes name="${lib.log4net}" />
+-                <includes name="${lib.nunit}" />
++                <include name="${lib.log4net}" />
++                <include name="${lib.nunit}" />
+             </fileset>
+         </copy>
+         <copy todir="${dir.bin}">
+             <fileset basedir="${dir.conf}">
+-                <includes name="*.config" />
++                <include name="*.config" />
+             </fileset>
+         </copy>
+         <copy   file="${dir.conf}/${name.top-level}.${name.project}.${name.tests}.dll.config" 
+                 tofile="${dir.bin}/${name.top-level}.${name.project}.${name.tests}-sample.dll.config" />
+         <copy todir="${dir.bin}">
+             <fileset basedir="${dir.doc}">
+-                <includes name="NamespaceSummary.xml" />
++                <include name="NamespaceSummary.xml" />
+             </fileset>
+         </copy>
+         
+-        <call target="update.version" />
+-        <echo message="Building assembly version ${assembly.version}" />
+     </target>
+        
+     <target name="build.all" depends="clean" description="Build all sources by calling all targets in project build files.">
+@@ -131,16 +129,16 @@
+         <property name="doc.privates" value="False" />
+         <property name="doc.empty-namespaces" value="False" />
+ 
+-        <property name="doc.include-assembly-version" value="True" />
++        <property name="doc.include-assembly-version" value="False" />
+         
+         <ndoc verbose="true">
+             <assemblies basedir="${dir.bin}">
+-                <includes name="${name.top-level}.${name.lib}.dll" />
+-                <includes name="${name.console.exe}.exe" />
+-                <excludes name="${name.top-level}.${name.lib}.${name.tests}.dll"/>
++                <include name="${name.top-level}.${name.lib}.dll" />
++                <include name="${name.console.exe}.exe" />
++                <exclude name="${name.top-level}.${name.lib}.${name.tests}.dll"/>
+             </assemblies>
+             <summaries basedir="${dir.bin}">
+-                <includes name="NamespaceSummary.xml"/>
++                <include name="NamespaceSummary.xml"/>
+             </summaries>
+             <documenters>
+                 <documenter name="MSDN">
+@@ -197,55 +195,55 @@
+             this will be used for both the source and binary release -->
+         <copy todir="${dir.dist}/doc">
+             <fileset basedir="${dir.doc}">
+-                <includes name="**/*"/>
++                <include name="**/*"/>
+             </fileset>
+         </copy>
+         <!-- Copy the binary and config files from the bin directory -->
+         <copy todir="${dir.dist}/bin">
+             <fileset basedir="${dir.base}">
+-                <includes name="${dir.bin}/*.dll"/>
+-                <includes name="${dir.bin}/*.exe"/>
+-                <includes name="${dir.bin}/*.config"/>
++                <include name="${dir.bin}/*.dll"/>
++                <include name="${dir.bin}/*.exe"/>
++                <include name="${dir.bin}/*.config"/>
+             </fileset>
+         </copy>
+         <copy todir="${dir.dist}/bin">
+             <fileset basedir="${dir.dist}">
+-                <includes name="doc**"/>
++                <include name="doc**"/>
+             </fileset>
+         </copy>
+         
+         <copy todir="${dir.dist}/src">
+             <fileset basedir="${dir.base}">
+-                <includes name="${dir.external-build}**" />
+-                <includes name="${dir.bin}**" />
+-                <includes name="${dir.build}**" />
+-                <includes name="${dir.conf}**" />
+-                <includes name="${dir.lib}**" />
+-                <includes name="${dir.src}**" />
+-                <includes name="${dir.tools}/nant/win32**" />
+-                <includes name="${dir.tools}/nant/linux**" />
++                <include name="${dir.external-build}**" />
++                <include name="${dir.bin}**" />
++                <include name="${dir.build}**" />
++                <include name="${dir.conf}**" />
++                <include name="${dir.lib}**" />
++                <include name="${dir.src}**" />
++                <include name="${dir.tools}/nant/win32**" />
++                <include name="${dir.tools}/nant/linux**" />
+                 
+-                <includes name="*.build" />
+-                <includes name="*.bat" />                
+-                <includes name="*.ndoc" />
++                <include name="*.build" />
++                <include name="*.bat" />                
++                <include name="*.ndoc" />
+                 
+-                <includes name="*.csproj" />
+-                <includes name="*.sln" />
++                <include name="*.csproj" />
++                <include name="*.sln" />
+                 
+-                <includes name="*.prjx" />
+-                <includes name="*.cmbx" />
++                <include name="*.prjx" />
++                <include name="*.cmbx" />
+                 
+-                <includes name="*.project" />
++                <include name="*.project" />
+                 
+-                <excludes name="${dir.doc}**" />
+-                <excludes name="**/*.log.*" />
+-                <excludes name="**/*.log" />
+-                <excludes name="**/obj**" />
++                <exclude name="${dir.doc}**" />
++                <exclude name="**/*.log.*" />
++                <exclude name="**/*.log" />
++                <exclude name="**/obj**" />
+             </fileset>
+         </copy>
+         <copy todir="${dir.dist}/src">
+             <fileset basedir="${dir.dist}">
+-                <includes name="doc**"/>
++                <include name="doc**"/>
+             </fileset>
+         </copy>
+ 
+@@ -268,13 +266,13 @@
+         
+         <zip zipfile="${dir.output}/${name.lib}-${assembly.version}-bin.zip">
+             <fileset basedir="${dir.dist}">
+-                <includes name="bin/**/**.*" />
++                <include name="bin/**/**.*" />
+             </fileset>
+         </zip>
+         
+         <zip zipfile="${dir.output}/${name.lib}-${assembly.version}-src.zip">
+             <fileset basedir="${dir.dist}">
+-                <includes name="src/**/**.*" />
++                <include name="src/**/**.*" />
+             </fileset>
+         </zip>
+ 
+diff -up sharpcvslib-0.35/src/build/SharpCvsLib.common.xml.cleanups sharpcvslib-0.35/src/build/SharpCvsLib.common.xml
+--- sharpcvslib-0.35/src/build/SharpCvsLib.common.xml.cleanups	2004-02-21 01:00:32.000000000 -0500
++++ sharpcvslib-0.35/src/build/SharpCvsLib.common.xml	2008-04-10 10:09:33.000000000 -0400
+@@ -27,7 +27,7 @@
+ CVS may be copied only under the terms of the GNU General Public License,
+ a copy of which can be found with the CVS distribution kit." />
+     <property name="assembly.copyright.href" value="http://sharpcvslib.sourceforge.net/license.html" />
+-    <property name="assembly.description" value="${nant.platform.name}; ${nant.settings.defaultframework}; ${build.date}" />
++    <property name="assembly.description" value="${platform::get-name()}; ${build.date}" />
+     <property name="assembly.company" value="SharpCvsLib - http://sharpcvslib.sourceforge.net" />
+     
+     <!-- Compiler information/ settings -->
+@@ -38,7 +38,7 @@ a copy of which can be found with the CV
+     <property name="compile.define" value="DEBUG;TRACE" />
+     
+     <!-- Directory structure -->
+-    <property name="dir.base" value="${nant.project.basedir}/.." />
++    <property name="dir.base" value="${project::get-base-directory()}/.." />
+     <property name="dir.bin" value="${dir.base}/bin" /> 
+     <property name="dir.build" value="${dir.base}/build" />
+     <property name="dir.conf" value="${dir.base}/conf" />
+@@ -63,4 +63,4 @@ a copy of which can be found with the CV
+     <property name="doc.title" value="${name.project}" />
+     <property name="doc.copyright.text" value="${assembly.copyright.text}" />
+     <property name="doc.copyright.href" value="${assembly.copyright.href}" />
+-</project>
+\ No newline at end of file
++</project>
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Console/SharpCvsLib/AssemblyInfo.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Console/SharpCvsLib/AssemblyInfo.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Console/SharpCvsLib/AssemblyInfo.cs.cleanups	2004-01-10 13:00:14.000000000 -0500
++++ sharpcvslib-0.35/src/src/ICSharpCode.Console/SharpCvsLib/AssemblyInfo.cs	2008-04-10 10:09:33.000000000 -0400
+@@ -27,5 +27,5 @@ using System;
+ using System.Reflection;
+ using System.Runtime.InteropServices;
+ 
+-[assembly: log4net.Config.DOMConfigurator(Watch=true)]
++[assembly: log4net.Config.XmlConfigurator(Watch=true)]
+ 
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Console/SharpCvsLib/Console.build.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Console/SharpCvsLib/Console.build
+--- sharpcvslib-0.35/src/src/ICSharpCode.Console/SharpCvsLib/Console.build.cleanups	2004-01-14 00:17:26.000000000 -0500
++++ sharpcvslib-0.35/src/src/ICSharpCode.Console/SharpCvsLib/Console.build	2008-04-10 10:09:33.000000000 -0400
+@@ -3,7 +3,7 @@
+ -->
+ <project name="ICSharpCode.SharpCvsLib" default="build">
+     <target name="build">
+-        <echo message="${nant.project.basedir}/../../src/SharpCvsLibAssemblyInfo.cs" />
++        <echo message="${project::get-base-directory()}/../../src/SharpCvsLibAssemblyInfo.cs" />
+         <csc    target="exe" 
+                 warnaserror="${compile.warnaserror}" 
+                 output="${dir.bin}/${name.console.exe}.exe" 
+@@ -11,23 +11,30 @@
+                 define="${compile.define}"
+                 doc="${dir.bin}/${name.console.exe}.xml">
+                 >
++
++            <nowarn>
++                <!-- ignore unused variables -->
++                <warning number="219" />
++                <!-- ignore unused private fields -->
++                <warning number="414" />
++            </nowarn>
+                 
+             <arg value="${compile.unsafe}" />
+             <arg value="${compile.checked}" />
+             
+             <sources>
+-                <includes name="**/*.cs" />
+-                <includes name="../../SharpCvsLibAssemblyInfo.cs" />
++                <include name="**/*.cs" />
++                <include name="../../SharpCvsLibAssemblyInfo.cs" />
+             </sources>
+ 
+             <references>
+-                <includes name="System.dll" />            
+-                <includes name="System.EnterpriseServices.dll" />
+-                <includes name="${dir.lib}/${lib.zip}" />
+-                <includes name="${dir.lib.ext}/${lib.log4net}" />
+-                <includes name="${dir.lib.ext}/${lib.nunit}" />
+-                <includes name="${dir.bin}/${name.top-level}.${name.lib}.dll" />
++                <include name="System.dll" />            
++                <include name="System.EnterpriseServices.dll" />
++                <include name="${dir.lib}/${lib.zip}" />
++                <include name="${dir.lib.ext}/${lib.log4net}" />
++                <include name="${dir.lib.ext}/${lib.nunit}" />
++                <include name="${dir.bin}/${name.top-level}.${name.lib}.dll" />
+             </references>
+         </csc>
+     </target>
+-</project>
+\ No newline at end of file
++</project>
+diff -up sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/AssemblyInfo.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/AssemblyInfo.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/AssemblyInfo.cs.cleanups	2004-01-10 13:00:16.000000000 -0500
++++ sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/AssemblyInfo.cs	2008-04-10 10:09:33.000000000 -0400
+@@ -27,4 +27,4 @@ using System;
+ using System.Reflection;
+ using System.Runtime.InteropServices;
+ 
+-[assembly: log4net.Config.DOMConfigurator(Watch=true)]
+\ No newline at end of file
++[assembly: log4net.Config.XmlConfigurator(Watch=true)]
+diff -up sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/Config/SharpCvsLibConfig.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/Config/SharpCvsLibConfig.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/Config/SharpCvsLibConfig.cs.cleanups	2003-12-06 16:54:08.000000000 -0500
++++ sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/Config/SharpCvsLibConfig.cs	2008-04-10 10:09:33.000000000 -0400
+@@ -179,8 +179,9 @@ namespace ICSharpCode.SharpCvsLib.Config
+             SharpCvsLibConfig config;
+             try {
+                 config =
+-                    (SharpCvsLibConfig)ConfigurationSettings.GetConfig
+-                    (SharpCvsLibConfigHandler.APP_CONFIG_SECTION);
++                    // (SharpCvsLibConfig)ConfigurationSettings.GetConfig
++                    // (SharpCvsLibConfigHandler.APP_CONFIG_SECTION);
++                    (SharpCvsLibConfig) System.Configuration.ConfigurationManager.GetSection (SharpCvsLibConfigHandler.APP_CONFIG_SECTION);
+ 
+                 if (null == config) {
+                     config = new SharpCvsLibConfig();
+diff -up sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/SharpCvsLib.build.cleanups sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/SharpCvsLib.build
+--- sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/SharpCvsLib.build.cleanups	2004-01-14 00:17:26.000000000 -0500
++++ sharpcvslib-0.35/src/src/ICSharpCode/SharpCvsLib/SharpCvsLib.build	2008-04-10 10:09:33.000000000 -0400
+@@ -10,21 +10,31 @@
+                 define="${compile.define}" 
+                 doc="${dir.bin}/${name.top-level}.${name.lib}.xml">
+                 
++            <nowarn>
++                <!-- ignore unused variables -->
++                <warning number="219" />
++                <!-- ignore unused private fields -->
++                <warning number="414" />
++                <!-- ignore unused private methods -->
++                <warning number="169" />
++            </nowarn>
++
+             <arg value="${compile.unsafe}" />
+             <arg value="${compile.checked}" />
+             
+             <sources>
+-                <includes name="**/*.cs" />
+-                <includes name="../../SharpCvsLibAssemblyInfo.cs" />
++                <include name="**/*.cs" />
++                <include name="../../SharpCvsLibAssemblyInfo.cs" />
+             </sources>
+             
+             <references>
+-                <includes name="System.dll" /> 
+-                <includes name="System.EnterpriseServices.dll" />           
+-                <includes name="${dir.lib}/${lib.zip}" />
+-                <includes name="${dir.lib.ext}/${lib.log4net}" />
++                <include name="System.dll" /> 
++                <include name="System.Configuration.dll" />
++                <include name="System.EnterpriseServices.dll" />           
++                <include name="${dir.lib}/${lib.zip}" />
++                <include name="${dir.lib.ext}/${lib.log4net}" />
+             </references>
+             
+         </csc>
+     </target>
+-</project>
+\ No newline at end of file
++</project>
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Client/CVSServerConnectionTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Client/CVSServerConnectionTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Client/CVSServerConnectionTest.cs.cleanups	2008-04-10 10:18:29.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Client/CVSServerConnectionTest.cs	2008-04-10 10:19:52.000000000 -0400
+@@ -65,7 +65,7 @@ namespace ICSharpCode.SharpCvsLib.Client
+                                     this.Settings.Config.Module);
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             connection.Connect (working, this.Settings.Config.ValidPassword);
+             connection.Close();
+@@ -86,7 +86,7 @@ namespace ICSharpCode.SharpCvsLib.Client
+                                     this.Settings.Config.Module);
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             try {
+                 connection.Connect (working, this.Settings.Config.InvalidPassword);
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/AddCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/AddCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/AddCommandTest.cs.cleanups	2008-04-10 10:20:31.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/AddCommandTest.cs	2008-04-10 10:23:05.000000000 -0400
+@@ -61,7 +61,7 @@ namespace ICSharpCode.SharpCvsLib.Comman
+ 
+             String[] files = Directory.GetFiles(modulePath, "*.txt");
+ 
+-            Assertion.Assert(files.Length > 0);
++            Assert.IsTrue(files.Length > 0);
+             ArrayList copiedFiles = new ArrayList ();
+             foreach (String file in files) {
+                 LOGGER.Debug("file=[" + file + "]");
+@@ -79,25 +79,25 @@ namespace ICSharpCode.SharpCvsLib.Comman
+                 this.Settings.Config.Module);
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             AddCommand command = new AddCommand (working);
+             //command.Folders = this.GetFolders(modulePath);
+             command.Folders = this.GetFoldersToAdd(copiedFiles);
+ 
+-            Assertion.Assert(command.Folders.Count > 0);
++            Assert.IsTrue(command.Folders.Count > 0);
+             LOGGER.Debug("folders count=[" + command.Folders.Count + "]");
+             foreach (DictionaryEntry folderDic in command.Folders) {
+                 Folder folder = (Folder)folderDic.Value;
+                 LOGGER.Debug("folder=[" + folder.ToString() + "]");
+                 LOGGER.Debug("entries count=[" + folder.Entries.Count + "]");
+             }
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             try {
+                 connection.Connect (working, this.Settings.Config.ValidPassword);
+             } catch (AuthenticationException) {
+-                Assertion.Assert ("Failed to authenticate with server.", true);
++                Assert.IsTrue (true, "Failed to authenticate with server.");
+             }
+ 
+             command.Execute (connection);
+@@ -106,7 +106,7 @@ namespace ICSharpCode.SharpCvsLib.Comman
+             try {
+                 connection.Connect(working, this.Settings.Config.ValidPassword);
+             } catch (AuthenticationException) {
+-                Assertion.Assert("Failed to authenticate with server.", true);
++                Assert.IsTrue(true, "Failed to authenticate with server.");
+             }
+             CommitCommand2 commitCommand = new CommitCommand2(working);
+             working.Folders = command.Folders;
+@@ -117,7 +117,7 @@ namespace ICSharpCode.SharpCvsLib.Comman
+             Manager manager = new Manager(working.WorkingPath);
+             Entries entries = manager.FetchEntries(Path.Combine(modulePath, "Entries"));
+             foreach (String addedFile in copiedFiles) {
+-                Assertion.Assert(entries.Contains(Path.Combine(modulePath, addedFile)));
++                Assert.IsTrue(entries.Contains(Path.Combine(modulePath, addedFile)));
+             }
+ 
+         }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/CheckoutModuleCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/CheckoutModuleCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/CheckoutModuleCommandTest.cs.cleanups	2008-04-10 10:23:26.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/CheckoutModuleCommandTest.cs	2008-04-10 11:35:52.000000000 -0400
+@@ -86,26 +86,23 @@ namespace ICSharpCode.SharpCvsLib.Comman
+         public void CheckoutTest () {
+             this.Checkout ();
+ 
+-            Assertion.Assert ("Should have found the check file.  file=[" +
+-                            checkFile + "]", File.Exists (checkFile));
++            Assert.IsTrue (File.Exists (checkFile) , "Should have found the check file.  file=[" +
++                            checkFile + "]");
+ 
+             Entries entries =
+                 manager.FetchEntries (rootDir);
+ 
+             String moduleDir = Path.Combine(this.settings.LocalPath, this.settings.Module);
+-            Assertion.Assert ("Build file should have a cvs entry.", entries.Contains(Path.Combine(moduleDir, checkFile)));
+-            Assertion.Assert (this.settings.Config.TargetDirectory + " directory should have a cvs entry.", 
+-                entries.Contains(Path.Combine(moduleDir, "src" + Path.DirectorySeparatorChar.ToString())));
++            Assert.IsTrue (entries.Contains(Path.Combine(moduleDir, checkFile)), "Build file should have a cvs entry.");
++            Assert.IsTrue (entries.Contains(Path.Combine(moduleDir, "src" + Path.DirectorySeparatorChar.ToString())), this.settings.Config.TargetDirectory + " directory should have a cvs entry.");
+             foreach (DictionaryEntry dicEntry in entries) {
+                 Entry entry = (Entry)dicEntry.Value;
+                 if (!entry.IsDirectory) {
+-                    Assertion.AssertNotNull("Should have date information.", entry.Date);
++                    Assert.IsNotNull(entry.Date, "Should have date information.");
+                 }
+             }
+-            Assertion.Assert ("Should not have a cvs directory above module path.",
+-                    !Directory.Exists (Path.Combine (this.settings.Config.LocalPath, manager.CVS)));
+-            Assertion.Assert ("Should not have a cvs directory in the current execution path.  ",
+-                            !Directory.Exists (Path.Combine (this.settings.Config.Module, manager.CVS)));
++            Assert.IsTrue (!Directory.Exists (Path.Combine (this.settings.Config.LocalPath, manager.CVS)), "Should not have a cvs directory above module path.");
++            Assert.IsTrue (!Directory.Exists (Path.Combine (this.settings.Config.Module, manager.CVS)), "Should not have a cvs directory in the current execution path.  ");
+ 
+ 
+         }
+@@ -138,8 +135,8 @@ namespace ICSharpCode.SharpCvsLib.Comman
+         /// <param name="expectedContent">The file contents that are expected.</param>
+         private void CheckoutRevisionTest (String revision, String expectedContent) {
+             this.Checkout (revision, null);
+-            Assertion.Assert ("Should have found the check file.  file=[" +
+-                            checkFile + "]", File.Exists (checkFile));
++            Assert.IsTrue (File.Exists (checkFile), "Should have found the check file.  file=[" +
++                            checkFile + "]");
+ 
+             ICvsFile[] entries =
+                 manager.Fetch (rootDir, Factory.FileType.Entries);
+@@ -158,17 +155,14 @@ namespace ICSharpCode.SharpCvsLib.Comman
+                 }
+             }
+ 
+-            Assertion.Assert ("Build file should have a cvs entry.", foundFileEntry == 1);
+-            Assertion.Assert (this.settings.Config.TargetDirectory + " directory should have a cvs entry.", foundDirectoryEntry == 1);
+-            Assertion.Assert ("Should not have a cvs directory above module path.",
+-                            !Directory.Exists (Path.Combine (this.settings.Config.LocalPath, manager.CVS)));
+-            Assertion.Assert ("Should not have a cvs directory in the current execution path.  ",
+-                            !Directory.Exists (Path.Combine (this.settings.Config.Module, manager.CVS)));
++            Assert.IsTrue (foundFileEntry == 1, "Build file should have a cvs entry.");
++            Assert.IsTrue (foundDirectoryEntry == 1, this.settings.Config.TargetDirectory + " directory should have a cvs entry.");
++            Assert.IsTrue (!Directory.Exists (Path.Combine (this.settings.Config.LocalPath, manager.CVS)), "Should not have a cvs directory above module path.");
++            Assert.IsTrue (!Directory.Exists (Path.Combine (this.settings.Config.Module, manager.CVS)), "Should not have a cvs directory in the current execution path.  ");
+ 
+             String tagFile =
+                 Path.Combine (Path.Combine (this.settings.Config.Module, manager.CVS), Tag.FILE_NAME);
+-            Assertion.Assert ("Should not have a cvs directory in the current execution path.  ",
+-                            !Directory.Exists (tagFile));
++            Assert.IsTrue (!Directory.Exists (tagFile), "Should not have a cvs directory in the current execution path.  ");
+ 
+             AssertFileContentsEqualString (checkFile, expectedContent);
+         }
+@@ -185,9 +179,7 @@ namespace ICSharpCode.SharpCvsLib.Comman
+             //    to the string read so this is removed manually:
+             actualContent = actualContent.Substring (0, actualContent.Length -2);
+             reader.Close ();
+-            Assertion.AssertEquals ("Files should be equal.",
+-                                    expectedContent,
+-                                    actualContent);
++            Assert.AreEqual (expectedContent, actualContent, "Files should be equal.");
+         }
+ 
+ 
+@@ -203,8 +195,8 @@ namespace ICSharpCode.SharpCvsLib.Comman
+                 Path.Combine (rootDir, this.settings.Config.TargetFile);
+ 
+             this.Checkout (null, this.settings.Config.OverrideDirectory);
+-            Assertion.Assert ("Should have found the check file.  file=[" +
+-                            checkFile + "]", File.Exists (checkFile));
++            Assert.IsTrue (File.Exists (checkFile), "Should have found the check file.  file=[" +
++                            checkFile + "]");
+ 
+             ICvsFile[] entries =
+                 manager.Fetch (rootDir, Factory.FileType.Entries);
+@@ -223,17 +215,14 @@ namespace ICSharpCode.SharpCvsLib.Comman
+                 }
+             }
+ 
+-            Assertion.Assert ("Build file should have a cvs entry.", foundFileEntry == 1);
+-            Assertion.Assert (this.settings.Config.TargetDirectory + " directory should have a cvs entry.", foundDirectoryEntry == 1);
+-            Assertion.Assert ("Should not have a cvs directory above module path.",
+-                            !Directory.Exists (Path.Combine (this.settings.Config.LocalPath, manager.CVS)));
+-            Assertion.Assert ("Should not have a cvs directory in the current execution path.  ",
+-                            !Directory.Exists (Path.Combine (this.settings.Config.Module, manager.CVS)));
++            Assert.IsTrue (foundFileEntry == 1, "Build file should have a cvs entry.");
++            Assert.IsTrue (foundDirectoryEntry == 1, this.settings.Config.TargetDirectory + " directory should have a cvs entry.");
++            Assert.IsTrue (!Directory.Exists (Path.Combine (this.settings.Config.LocalPath, manager.CVS)), "Should not have a cvs directory above module path.");
++            Assert.IsTrue (!Directory.Exists (Path.Combine (this.settings.Config.Module, manager.CVS)), "Should not have a cvs directory in the current execution path.  ");
+ 
+             String tagFile =
+                 Path.Combine (Path.Combine (this.settings.Config.Module, manager.CVS), Tag.FILE_NAME);
+-            Assertion.Assert ("Should not have a cvs directory and tag file in the current execution path.  ",
+-                            !Directory.Exists (tagFile));
++            Assert.IsTrue (!Directory.Exists (tagFile), "Should not have a cvs directory and tag file in the current execution path.  ");
+         }
+ 
+         /// <summary>
+@@ -270,15 +259,15 @@ namespace ICSharpCode.SharpCvsLib.Comman
+             working.OverrideDirectory = overrideDirectory;
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             ICommand command = new CheckoutModuleCommand (working);
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             try {
+                 connection.Connect (working, this.settings.Config.ValidPassword);
+             } catch (AuthenticationException) {
+-                Assertion.Assert ("Failed to authenticate with server.", true);
++                Assert.IsTrue (true, "Failed to authenticate with server.");
+             }
+ 
+             command.Execute (connection);
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/RTagCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/RTagCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/RTagCommandTest.cs.cleanups	2008-04-10 11:36:08.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/RTagCommandTest.cs	2008-04-10 11:38:35.000000000 -0400
+@@ -100,15 +100,15 @@ namespace ICSharpCode.SharpCvsLib.Comman
+         }
+ 
+         private void Checkout (WorkingDirectory workingDirectory, CVSServerConnection connection) {
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             ICommand command = new CheckoutModuleCommand (workingDirectory);
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             try {
+                 connection.Connect (workingDirectory, this.settings.Config.ValidPassword);
+             } catch (AuthenticationException) {
+-                Assertion.Assert ("Failed to authenticate with server.", true);
++                Assert.IsTrue (true, "Failed to authenticate with server.");
+             }
+ 
+             command.Execute (connection);
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/UpdateCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/UpdateCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/UpdateCommandTest.cs.cleanups	2008-04-10 11:39:07.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/UpdateCommandTest.cs	2008-04-10 11:49:12.000000000 -0400
+@@ -105,12 +105,12 @@ namespace ICSharpCode.SharpCvsLib.Comman
+             File.Delete (checkFile);
+             LOGGER.Debug("After deleted checkFile=[" + checkFile + "]");
+ 
+-            Assertion.Assert ("File should be gone now.  file=[" + checkFile + "]", !File.Exists (checkFile));
++            Assert.IsTrue (!File.Exists (checkFile), "File should be gone now.  file=[" + checkFile + "]");
+             LOGGER.Debug("Before update all files recursively.");
+             this.UpdateAllRecursive (rootDir);
+             LOGGER.Debug("After update all files recursively.");
+-            Assertion.Assert ("Should have found the file.  file=[" +
+-                            checkFile + "]", File.Exists (checkFile));
++            Assert.IsTrue (File.Exists (checkFile), "Should have found the file.  file=[" +
++                            checkFile + "]");
+ 
+             String moduleDir = Path.Combine(rootDir, this.settings.Module);
+             Entries entries =
+@@ -122,23 +122,21 @@ namespace ICSharpCode.SharpCvsLib.Comman
+                 Directory.GetDirectories (rootDir);
+             // Minus the cvs directory
+             int total = files.Length + directories.Length - 1;
+-            Assertion.Assert ("Count of directories and files should be equal to " +
++            Assert.IsTrue (entries.Count == total, 
++                            "Count of directories and files should be equal to " +
+                             "the entries in the CVS/Entries file.  They are not.  " +
+                             "entriesCount=[" + entries.Count + "]" +
+                             "files=[" + files.Length + "]" +
+                             "directories=[" + directories.Length + "]" +
+-                            "total=[" + total + "]",
+-                            entries.Count == total);
++                            "total=[" + total + "]");
+             LOGGER.Debug("Before checking all file names.");
+ 
+-            Assertion.Assert("Target file=[" + this.settings.TargetFile + "] should have a cvs entry.",
+-                entries.Contains(Path.Combine(moduleDir, this.settings.TargetFile)));
++            Assert.IsTrue(entries.Contains(Path.Combine(moduleDir, this.settings.TargetFile)), "Target file=[" + this.settings.TargetFile + "] should have a cvs entry.");
+ 
+             // Had some problems with an extra module directory appearing under
+             //    the main working folder.
+             String doubleModuleDir = Path.Combine (rootDir, this.settings.Config.Module);
+-            Assertion.Assert ("Should not be a module directory under root folder=[" + doubleModuleDir + "]",
+-                            !Directory.Exists (doubleModuleDir));
++            Assert.IsTrue (!Directory.Exists (doubleModuleDir), "Should not be a module directory under root folder=[" + doubleModuleDir + "]");
+         }
+ 
+         private void UpdateAllRecursive (String rootDir, String overrideDirectory) {
+@@ -151,10 +149,10 @@ namespace ICSharpCode.SharpCvsLib.Comman
+             working.OverrideDirectory = overrideDirectory;
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             ICommand command = new UpdateCommand2 (working);
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             connection.Connect (working, this.settings.Config.ValidPassword);
+ 
+@@ -198,10 +196,10 @@ namespace ICSharpCode.SharpCvsLib.Comman
+             this.Checkout (null, this.settings.Config.OverrideDirectory);
+             File.Delete (checkFile);
+ 
+-            Assertion.Assert ("File should be gone now.  file=[" + checkFile + "]", !File.Exists (checkFile));
++            Assert.IsTrue (!File.Exists (checkFile), "File should be gone now.  file=[" + checkFile + "]");
+             this.UpdateAllRecursive (rootDir, this.settings.Config.OverrideDirectory);
+-            Assertion.Assert ("Should have found the file.  file=[" +
+-                            checkFile + "]", File.Exists (checkFile));
++            Assert.IsTrue (File.Exists (checkFile), "Should have found the file.  file=[" +
++                            checkFile + "]");
+ 
+         }
+     }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/UpdateCommandTestCvsnt.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/UpdateCommandTestCvsnt.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/UpdateCommandTestCvsnt.cs.cleanups	2008-04-10 11:50:01.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Commands/UpdateCommandTestCvsnt.cs	2008-04-10 11:54:46.000000000 -0400
+@@ -91,10 +91,10 @@ namespace ICSharpCode.SharpCvsLib.Comman
+                                     CVSNT_MODULE);
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             ICommand command = new UpdateCommand2 (working);
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             connection.Connect (working, this.settings.Config.ValidPassword);
+         }
+@@ -116,10 +116,10 @@ namespace ICSharpCode.SharpCvsLib.Comman
+                                     CVSNT_MODULE);
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             ICommand command = new UpdateCommand2 (working);
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             connection.Connect (working, this.settings.Config.ValidPassword);
+         }
+@@ -139,15 +139,15 @@ namespace ICSharpCode.SharpCvsLib.Comman
+                                     CVSNT_MODULE);
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             ICommand command = new CheckoutModuleCommand (working);
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             try {
+                 connection.Connect (working, this.settings.Config.ValidPassword);
+             } catch (AuthenticationException) {
+-                Assertion.Assert ("Failed to authenticate with server.", true);
++                Assert.IsTrue (true, "Failed to authenticate with server.");
+             }
+ 
+             command.Execute (connection);
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Config/SharpCvsLibConfigHandlerTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Config/SharpCvsLibConfigHandlerTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Config/SharpCvsLibConfigHandlerTest.cs.cleanups	2003-11-05 00:07:32.000000000 -0500
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Config/SharpCvsLibConfigHandlerTest.cs	2008-04-10 11:57:45.000000000 -0400
+@@ -80,12 +80,8 @@ public class SharpCvsLibConfigHandlerTes
+     }
+ 
+     private void CheckValues (SharpCvsLibConfig config) {
+-        Assertion.AssertEquals ("timeout value",
+-                                TIMEOUT,
+-                                1000);
+-        Assertion.AssertEquals ("authorization sleep value",
+-                                AUTH_SLEEP,
+-                                1000);
++        Assert.AreEqual (TIMEOUT, 1000, "timeout value");
++        Assert.AreEqual (AUTH_SLEEP, 1000, "authorization sleep value");
+     }
+ 
+     /// <summary>
+@@ -97,8 +93,9 @@ public class SharpCvsLibConfigHandlerTes
+     [Test]
+     public void GetConfigTestFile () {
+         SharpCvsLibConfig config =
+-            (SharpCvsLibConfig)ConfigurationSettings.GetConfig
+-            (SharpCvsLibConfigHandler.APP_CONFIG_SECTION);
++            // (SharpCvsLibConfig)ConfigurationSettings.GetConfig
++            // (SharpCvsLibConfigHandler.APP_CONFIG_SECTION);
++            (SharpCvsLibConfig) System.Configuration.ConfigurationManager.GetSection (SharpCvsLibConfigHandler.APP_CONFIG_SECTION);
+ 
+         this.CheckValues (config);
+     }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Config/Tests/TestSettings.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Config/Tests/TestSettings.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Config/Tests/TestSettings.cs.cleanups	2003-10-04 22:56:14.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Config/Tests/TestSettings.cs	2008-04-10 10:09:33.000000000 -0400
+@@ -64,8 +64,9 @@ namespace ICSharpCode.SharpCvsLib.Config
+         public TestSettings () {
+             try {
+                 this.config = 
+-                    (SharpCvsLibTestsConfig)ConfigurationSettings.GetConfig 
+-                        (SharpCvsLibTestsConfigHandler.APP_CONFIG_SECTION);
++                    // (SharpCvsLibTestsConfig)ConfigurationSettings.GetConfig 
++                    //    (SharpCvsLibTestsConfigHandler.APP_CONFIG_SECTION);
++                    (SharpCvsLibTestsConfig)System.Configuration.ConfigurationManager.GetSection (SharpCvsLibTestsConfigHandler.APP_CONFIG_SECTION);
+                 
+                 if (null == this.config) {
+                     this.config = new SharpCvsLibTestsConfig ();
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/AddCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/AddCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/AddCommandTest.cs.cleanups	2008-04-10 11:59:56.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/AddCommandTest.cs	2008-04-10 11:58:56.000000000 -0400
+@@ -77,7 +77,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             // commit remove TargetFile
+             String[] files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, 
+                 settings.Config.Module), settings.Config.TargetFile);
+-            Assertion.Assert(files.Length > 0);
++            Assert.IsTrue(files.Length > 0);
+ 
+             foreach (String file in files) {
+                 LOGGER.Debug("file=[" + file + "]");
+@@ -90,10 +90,10 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String [] commandLineArgs = commandLine.Split(' ');
+             // Create consoleMain object to test the Add command
+             ConsoleMain consoleMain = new ConsoleMain();
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+             
+             consoleMain.Execute(commandLineArgs);
+-            Assertion.Assert(File.Exists(fullPath));
++            Assert.IsTrue (File.Exists(fullPath));
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/CheckoutCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/CheckoutCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/CheckoutCommandTest.cs.cleanups	2008-04-10 12:01:03.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/CheckoutCommandTest.cs	2008-04-10 12:04:56.000000000 -0400
+@@ -82,7 +82,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             // Test Creating a ConsoleMain object
+             ConsoleMain consoleMain = new ConsoleMain ();
+             consoleMain.Execute (commandLineArgs);
+-            Assertion.Assert (Directory.Exists(Path.Combine(settings.Config.LocalPath, settings.Config.Module)));
++            Assert.IsTrue (Directory.Exists(Path.Combine(settings.Config.LocalPath, settings.Config.Module)));
+         }
+         /// <summary>
+         ///     Checkout files based on revision specified in -r option.
+@@ -97,7 +97,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             ConsoleMain consoleMain = new ConsoleMain();
+             consoleMain.Execute (commandLineArgs);
+             // check for directory
+-            Assertion.Assert (Directory.Exists(Path.Combine(settings.Config.LocalPath, settings.Config.Module)));
++            Assert.IsTrue (Directory.Exists(Path.Combine(settings.Config.LocalPath, settings.Config.Module)));
+             // check for files with specified revision
+         }
+         /// <summary>
+@@ -110,9 +110,9 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String [] commandLineArgs = commandLine.Split(' ');
+             // Test Creating a ConsoleMain object
+             ConsoleMain consoleMain = new ConsoleMain ();
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+             consoleMain.Execute (commandLineArgs);
+-            Assertion.Assert(Directory.Exists(Path.Combine(settings.Config.LocalPath, "newlocation")));
++            Assert.IsTrue(Directory.Exists(Path.Combine(settings.Config.LocalPath, "newlocation")));
+         }
+         /// <summary>
+         ///     Checkout files no earlier than the specified Date 
+@@ -124,16 +124,16 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String [] commandLineArgs = commandLine.Split(' ');
+             // Test Creating a ConsoleMain object
+             ConsoleMain consoleMain = new ConsoleMain();
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+             consoleMain.Execute( commandLineArgs);
+-            Assertion.Assert(Directory.Exists(Path.Combine(settings.Config.LocalPath, settings.Config.Module)));
++            Assert.IsTrue(Directory.Exists(Path.Combine(settings.Config.LocalPath, settings.Config.Module)));
+             // Find a file that should exist 
+-            //Assertion.Assert ("Should have found the check file.  file=[" +
+-            //    checkFile + "]", File.Exists (checkFile));
++            //Assert.IsTrue (File.Exists (checkFile), "Should have found the check file.  file=[" +
++            //    checkFile + "]");
+ 
+             // Find a file that should not exist
+-            //Assertion.Assert ("Should have found the check file.  file=[" +
+-            //    checkFile + "]", File.Exists (checkFile));
++            //Assert.IsTrue (File.Exists (checkFile), "Should have found the check file.  file=[" +
++            //    checkFile + "]");
+ 
+         }
+ 
+@@ -155,14 +155,14 @@ namespace ICSharpCode.SharpCvsLib.Consol
+                 main.Execute(commandLine.Split(' '));
+             } catch (Exception e) {
+                 LOGGER.Error(e);
+-                Assertion.Fail(e.ToString());
++                Assert.Fail(e.ToString());
+             }
+ 
+             Manager manager = new Manager(this.GetTempPath());
+             String modDir = Path.Combine(this.GetTempPath(), this.settings.Config.Module);
+             Tag tag = manager.FetchTag(Path.Combine(modDir, "src"));
+-            Assertion.AssertNotNull(tag);
+-            Assertion.AssertEquals("NHEAD", tag.FileContents);
++            Assert.IsNotNull(tag);
++            Assert.AreEqual("NHEAD", tag.FileContents);
+  
+         }
+ 
+@@ -184,13 +184,13 @@ namespace ICSharpCode.SharpCvsLib.Consol
+                 main.Execute(commandLine.Split(' '));
+             } catch (Exception e) {
+                 LOGGER.Error(e);
+-                Assertion.Fail(e.ToString());
++                Assert.Fail(e.ToString());
+             }
+             Manager manager = new Manager(this.GetTempPath());
+             String modDir = Path.Combine(this.GetTempPath(), this.settings.Config.Module);
+             Tag tag = manager.FetchTag(Path.Combine(modDir, "src"));
+-            Assertion.AssertNotNull(tag);
+-            Assertion.AssertEquals("NHEAD", tag.FileContents);
++            Assert.IsNotNull(tag);
++            Assert.AreEqual("NHEAD", tag.FileContents);
+         }
+ 
+     }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/InitCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/InitCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/InitCommandTest.cs.cleanups	2008-04-10 12:05:13.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/InitCommandTest.cs	2008-04-10 12:05:36.000000000 -0400
+@@ -74,7 +74,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String [] commandLineArgs = commandLine.Split(' ');
+             // Create a consoleMain to test the InitCommand
+             ConsoleMain consoleMain = new ConsoleMain();
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+             consoleMain.Execute(commandLineArgs);
+         }
+     }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/LoginCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/LoginCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/LoginCommandTest.cs.cleanups	2008-04-10 12:05:52.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/LoginCommandTest.cs	2008-04-10 12:06:12.000000000 -0400
+@@ -74,9 +74,9 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String [] commandLineArgs = commandLine.Split(' ');
+             // Create the consoleMain to test the LoginCommand
+             ConsoleMain consoleMain = new ConsoleMain();
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+ 
+             consoleMain.Execute(commandLineArgs);
+         }
+     }
+-}
+\ No newline at end of file
++}
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/RemoveCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/RemoveCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/RemoveCommandTest.cs.cleanups	2008-04-10 12:08:04.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/RemoveCommandTest.cs	2008-04-10 12:08:36.000000000 -0400
+@@ -80,10 +80,10 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String [] commandLineArgs = commandLine.Split(' ');
+             // Test Creating a RemoveCommand object
+             ConsoleMain consoleMain = new ConsoleMain();
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+             
+             consoleMain.Execute(commandLineArgs);
+-            Assertion.Assert(!File.Exists(Path.Combine(settings.Config.LocalPath, settings.Config.TargetFile)));
++            Assert.IsTrue(!File.Exists(Path.Combine(settings.Config.LocalPath, settings.Config.TargetFile)));
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/RTagCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/RTagCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/RTagCommandTest.cs.cleanups	2008-04-10 12:06:29.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/RTagCommandTest.cs	2008-04-10 12:07:49.000000000 -0400
+@@ -76,7 +76,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             // Test Create the consoleMain to test the console RTagCommand
+             ConsoleMain consoleMain = new ConsoleMain();
+             consoleMain.Execute(commandLineArgs);
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+         }
+         /// <summary>
+         ///     RTag files based on revision specified in -r option.
+@@ -93,7 +93,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             // Test Create the consoleMain to test the console RTagCommand
+             ConsoleMain consoleMain = new ConsoleMain();
+             consoleMain.Execute(commandLineArgs);
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+         }
+         /// <summary>
+         ///     RTag files to specified description
+@@ -110,7 +110,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             // Test Create the consoleMain to test the console RTagCommand
+             ConsoleMain consoleMain = new ConsoleMain();
+             consoleMain.Execute(commandLineArgs);
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+         }
+         /// <summary>
+         ///     RTag files no earlier than the specified Date 
+@@ -128,7 +128,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             // Test Create the consoleMain to test the console RTagCommand
+             ConsoleMain consoleMain = new ConsoleMain();
+             consoleMain.Execute(commandLineArgs);
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/UpdateCommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/UpdateCommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/UpdateCommandTest.cs.cleanups	2008-04-10 12:08:50.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Commands/UpdateCommandTest.cs	2008-04-10 12:10:56.000000000 -0400
+@@ -77,7 +77,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             // Test Creating a consoleMain object to test the UpdateCommand object
+             ConsoleMain consoleMain = new ConsoleMain();
+             consoleMain.Execute(commandLineArgs);
+-            Assertion.AssertNotNull ("Should have a consoleMain object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a consoleMain object.");
+         }
+         /// <summary>
+         ///     Update files based on revision specified in -r option.
+@@ -94,7 +94,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String [] commandLineArgs = commandLine.Split(' ');
+             // Test Creating a consoleMain object to test the UpdateCommand object
+             ConsoleMain consoleMain = new ConsoleMain();
+-            Assertion.AssertNotNull ("Should have a consoleMain object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a consoleMain object.");
+             consoleMain.Execute(commandLineArgs);
+         }
+         /// <summary>
+@@ -110,9 +110,9 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String [] commandLineArgs = commandLine.Split(' ');
+             // Test Creating a ConsoleMain object to test the UpdateCommand object
+             ConsoleMain consoleMain = new ConsoleMain();
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+             consoleMain.Execute(commandLineArgs);
+-            Assertion.Assert(Directory.Exists(Path.Combine(settings.Config.LocalPath, "newlocation")));
++            Assert.IsTrue(Directory.Exists(Path.Combine(settings.Config.LocalPath, "newlocation")));
+         }
+         /// <summary>
+         ///     Update files no earlier than the specified Date 
+@@ -128,15 +128,15 @@ namespace ICSharpCode.SharpCvsLib.Consol
+            
+             // Test Creating a ConsoleMain object to test the UpdateCommand object
+             ConsoleMain consoleMain = new ConsoleMain();
+-            Assertion.AssertNotNull ("Should have a command object.", consoleMain);
++            Assert.IsNotNull (consoleMain, "Should have a command object.");
+             consoleMain.Execute( commandLineArgs);
+             // Find a file that should exist 
+-            //Assertion.Assert ("Should have found the update file.  file=[" +
+-            //    checkFile + "]", File.Exists (checkFile));
++            //Assert.IsTrue (File.Exists (checkFile), "Should have found the update file.  file=[" +
++            //    checkFile + "]");
+ 
+             // Find a file that should not exist
+-            //Assertion.Assert ("Should have found the update file.  file=[" +
+-            //    checkFile + "]", File.Exists (checkFile));
++            //Assert.IsTrue (File.Exists (checkFile), "Should have found the update file.  file=[" +
++            //    checkFile + "]");
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandLineParserTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandLineParserTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandLineParserTest.cs.cleanups	2008-04-10 12:11:11.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandLineParserTest.cs	2008-04-10 12:12:19.000000000 -0400
+@@ -68,7 +68,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             String[] args = {"--help"};
+             // Test Creating a CommandLineParser object
+             CommandLineParser newCommandLineParser = new CommandLineParser( args);
+-            Assertion.AssertNotNull ("Should have a command object.", newCommandLineParser);
++            Assert.IsNotNull (newCommandLineParser, "Should have a command object.");
+             LOGGER.Debug("Before parse execute for MakeCommandParserTest.");
+             newCommandLineParser.Execute();
+         }
+@@ -95,7 +95,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+ 
+                 LOGGER.Debug("Before execute MinusDOptionConnectedToCvsRoot good.");
+                 parser.Execute ();
+-                Assertion.Fail("Should throw an exception.");
++                Assert.Fail("Should throw an exception.");
+             } catch (CvsRootParseException e){
+                 // expected the exception, log the error for good luck
+                 LOGGER.Debug(e);
+@@ -112,7 +112,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+                 parser.Execute();
+             } catch (CvsRootParseException e){
+                 LOGGER.Error(e);
+-                Assertion.Fail ("Should not throw an exception, valid parameters.");
++                Assert.Fail ("Should not throw an exception, valid parameters.");
+             } catch (Exception e) {
+                 // this should not happen, log it and rethrow the exception
+                 LOGGER.Error(e);
+@@ -135,8 +135,8 @@ namespace ICSharpCode.SharpCvsLib.Consol
+                 LOGGER.Error(e);
+                 throw e;
+             }
+-            Assertion.Equals("-r v0_3_1 -d newlocation ", parser.Options);
+-            Assertion.Equals("sharpcvslib", parser.Repository);
++            Assert.AreEqual("-r v0_3_1 -d newlocation ", parser.Options);
++            Assert.AreEqual("sharpcvslib", parser.Repository);
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandNamesTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandNamesTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandNamesTest.cs.cleanups	2008-04-10 12:12:36.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandNamesTest.cs	2008-04-10 12:13:26.000000000 -0400
+@@ -79,9 +79,9 @@ namespace ICSharpCode.SharpCvsLib.Consol
+         private void AssertCommandEquals (Command com,
+                                         string prime, string nick1, string nick2)
+         {
+-            Assertion.AssertEquals (prime, com.First);
+-            Assertion.AssertEquals (nick1, com.Nick1);
+-            Assertion.AssertEquals (nick2, com.Nick2);
++            Assert.AreEqual (prime, com.First);
++            Assert.AreEqual (nick1, com.Nick1);
++            Assert.AreEqual (nick2, com.Nick2);
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandTest.cs.cleanups	2008-04-10 12:13:45.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/CommandTest.cs	2008-04-10 12:14:16.000000000 -0400
+@@ -73,9 +73,9 @@ namespace ICSharpCode.SharpCvsLib.Consol
+         }
+         private void AssertCommandEquals (Command com,
+                                         string prime, string nick1, string nick2) {
+-            Assertion.AssertEquals (prime, com.First);
+-            Assertion.AssertEquals (nick1, com.Nick1);
+-            Assertion.AssertEquals (nick2, com.Nick2);
++            Assert.AreEqual (prime, com.First);
++            Assert.AreEqual (nick1, com.Nick1);
++            Assert.AreEqual (nick2, com.Nick2);
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/UsageTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/UsageTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/UsageTest.cs.cleanups	2008-04-10 12:14:31.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Console/Parser/UsageTest.cs	2008-04-10 12:15:35.000000000 -0400
+@@ -72,7 +72,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+         public void MakeUsageTest ()
+         {
+             // Check the Usage.General string against literal
+-            Assertion.Equals(Usage.General, @"   Usage: cvs [cvs-options] command [command-options-and-arguments]
++            Assert.AreEqual(Usage.General, @"   Usage: cvs [cvs-options] command [command-options-and-arguments]
+                             where cvs-options are -q, -n, etc.
+                             (specify --help-options for a list of options)
+                             where command is add, admin, etc.
+@@ -90,7 +90,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+                             the CVSNT home page at http://www.cvsnt.org/
+                             ");
+             // Check the Usage.Commands string against literal
+-            Assertion.Equals(Usage.Commands, @"CVS commands are:
++            Assert.AreEqual(Usage.Commands, @"CVS commands are:
+                             add          Add a new file/directory to the repository
+                             admin        Administration front end for rcs
+                             annotate     Show last revision where each line was modified
+@@ -143,7 +143,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+                             (Specify the --help option for a list of other help options)
+                             ");
+             // Check the Usage.Options string against literal
+-            Assertion.Equals(Usage.Options, @"CVS global options (specified before the command name) are:
++            Assert.AreEqual(Usage.Options, @"CVS global options (specified before the command name) are:
+                             -D prefix       Adds a prefix to CVSROOT.
+                             -H              Displays usage information for command.
+                             -Q              Cause CVS to be really quiet.
+@@ -174,7 +174,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+                             (Specify the --help option for a list of other help options)
+                             ");
+             // Check the Usage.Synonyms string for not being null
+-            Assertion.AssertNotNull(Usage.Synonyms);
++            Assert.IsNotNull(Usage.Synonyms);
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileHandler/UncompressedFileHandlerTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileHandler/UncompressedFileHandlerTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileHandler/UncompressedFileHandlerTest.cs.cleanups	2008-04-10 12:16:01.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileHandler/UncompressedFileHandlerTest.cs	2008-04-10 12:18:15.000000000 -0400
+@@ -182,12 +182,12 @@ namespace ICSharpCode.SharpCvsLib.FileHa
+ 
+             // Validate that the file we received is as expected
+             file = File.OpenRead(fileName);
+-            Assertion.Assert(file.Length == GetTextLen(TEXT_BLOCKS, linefeedChars));
++            Assert.IsTrue(file.Length == GetTextLen(TEXT_BLOCKS, linefeedChars));
+             for (int n = 0; n < GetTextLen(TEXT_BLOCKS, linefeedChars) ; n++) {
+                 byte actual = (byte)file.ReadByte();
+                 byte wanted = GenerateTextByte(n, linefeedChars);
+                 msg = String.Format("n:{0} actual:{1} wanted:{2}", n, actual, wanted);
+-                Assertion.AssertEquals(msg, wanted, actual);
++                Assert.AreEqual(wanted, actual, msg);
+             }
+             file.Close();
+         }
+@@ -221,7 +221,7 @@ namespace ICSharpCode.SharpCvsLib.FileHa
+ 
+             if (isCompressed) {
+                 // First char should be a 'z'
+-                Assertion.AssertEquals(cvsStream.ReadByte(), 'z');
++                Assert.AreEqual(cvsStream.ReadByte(), 'z');
+             }
+ 
+             // Read the first line which should be the line length
+@@ -229,14 +229,14 @@ namespace ICSharpCode.SharpCvsLib.FileHa
+             len = Int32.Parse(numStr);
+             msg = String.Format("Expected length of {0} but got length {1}",
+                                 GetTextLen(TEXT_BLOCKS, linefeedChars), len);
+-            Assertion.AssertEquals(GetTextLen(TEXT_BLOCKS, linefeedChars), len);
++            Assert.AreEqual(GetTextLen(TEXT_BLOCKS, linefeedChars), len);
+ 
+             // Check what was written to the memory stream matches the file we generated
+             for (int n = 0; n < GetTextLen(TEXT_BLOCKS, linefeedChars); n++) {
+                 byte actual = (byte)cvsStream.ReadByte();
+                 byte wanted = GenerateTextByte(n, linefeedChars);
+                 msg = String.Format("n:{0} actual:{1} wanted:{2}", n, actual, wanted);
+-                Assertion.AssertEquals(msg, wanted, actual);
++                Assert.AreEqual(wanted, actual, msg);
+             }
+         }
+ 
+@@ -369,12 +369,12 @@ namespace ICSharpCode.SharpCvsLib.FileHa
+ 
+             // Now validate that the file we received is as expected
+             file = File.OpenRead(fileName);
+-            Assertion.Assert(file.Length == GetBinaryLen(BINARY_BLOCKS));
++            Assert.IsTrue(file.Length == GetBinaryLen(BINARY_BLOCKS));
+             for (int n = 0; n < GetBinaryLen(BINARY_BLOCKS) ; n++) {
+                 byte actual = (byte)file.ReadByte();
+                 byte wanted = GenerateBinaryByte(n);
+                 msg = String.Format("n:{0} actual:0x{1:X2} wanted:0x{2:X2}", n, actual, wanted);
+-                Assertion.AssertEquals(msg, wanted, actual);
++                Assert.AreEqual(wanted, actual, msg);
+             }
+             file.Close();
+         }
+@@ -405,7 +405,7 @@ namespace ICSharpCode.SharpCvsLib.FileHa
+ 
+             if (isCompressed) {
+                 // First char should be a 'z'
+-                Assertion.AssertEquals(cvsStream.ReadByte(), 'z');
++                Assert.AreEqual(cvsStream.ReadByte(), 'z');
+             }
+ 
+             // Read the first line which should be the line length
+@@ -413,14 +413,14 @@ namespace ICSharpCode.SharpCvsLib.FileHa
+             len = Int32.Parse(numStr);
+             msg = String.Format("Expected length of {0} but got length {1}",
+                                 GetBinaryLen(BINARY_BLOCKS), len);
+-            Assertion.AssertEquals(GetBinaryLen(BINARY_BLOCKS), len);
++            Assert.AreEqual(GetBinaryLen(BINARY_BLOCKS), len);
+ 
+             // Check what was written to the memory stream matches the file we generated
+             for (int n = 0; n < GetBinaryLen(BINARY_BLOCKS); n++) {
+                 byte actual = (byte)cvsStream.ReadByte();
+                 byte wanted = GenerateBinaryByte(n);
+                 msg = String.Format("n:{0} actual:0x{1:X2} wanted:0x{2:X2}", n, actual, wanted);
+-                Assertion.AssertEquals(msg, wanted, actual);
++                Assert.AreEqual(wanted, actual, msg);
+             }
+         }
+ 
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/EntryTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/EntryTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/EntryTest.cs.cleanups	2008-04-10 12:18:35.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/EntryTest.cs	2008-04-10 12:25:23.000000000 -0400
+@@ -136,29 +136,29 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+         public void TestParseCheckoutEntry () {
+             Entry entry = new Entry (this.settings.Config.LocalPath, CHECKOUT_ENTRY);
+ 
+-            Assertion.AssertEquals (this.settings.Config.LocalPath, entry.Path);
+-            Assertion.AssertEquals (Path.Combine (this.settings.Config.LocalPath, CHECKOUT_ENTRY_FILENAME), 
++            Assert.AreEqual (this.settings.Config.LocalPath, entry.Path);
++            Assert.AreEqual (Path.Combine (this.settings.Config.LocalPath, CHECKOUT_ENTRY_FILENAME), 
+                 entry.FullPath);
+-            Assertion.Assert (entry.Filename.Equals (ENTRY_FILE_NAME));
++            Assert.IsTrue (entry.Filename.Equals (ENTRY_FILE_NAME));
+ 
+-            Assertion.AssertEquals ("CvsFileManagerTest.cs", entry.Name);
+-            Assertion.AssertEquals ("1.1", entry.Revision);
+-            Assertion.AssertEquals ("Tue May 13 05:10:17 2003", entry.Date);
+-            Assertion.Assert (entry.Conflict == null);
+-            Assertion.Assert (entry.Options.Equals (""));
+-            Assertion.Assert (entry.Tag.Equals (""));
+-
+-            Assertion.Assert (entry.TimeStamp.Day == 13);
+-            Assertion.Assert (entry.TimeStamp.Month == 5);
+-            Assertion.Assert (entry.TimeStamp.Year == 2003);
+-            Assertion.Assert (entry.TimeStamp.Hour == 5);
+-            Assertion.Assert (entry.TimeStamp.Minute == 10);
+-            Assertion.Assert (entry.TimeStamp.Second == 17);
++            Assert.AreEqual ("CvsFileManagerTest.cs", entry.Name);
++            Assert.AreEqual ("1.1", entry.Revision);
++            Assert.AreEqual ("Tue May 13 05:10:17 2003", entry.Date);
++            Assert.IsTrue (entry.Conflict == null);
++            Assert.IsTrue (entry.Options.Equals (""));
++            Assert.IsTrue (entry.Tag.Equals (""));
++
++            Assert.IsTrue (entry.TimeStamp.Day == 13);
++            Assert.IsTrue (entry.TimeStamp.Month == 5);
++            Assert.IsTrue (entry.TimeStamp.Year == 2003);
++            Assert.IsTrue (entry.TimeStamp.Hour == 5);
++            Assert.IsTrue (entry.TimeStamp.Minute == 10);
++            Assert.IsTrue (entry.TimeStamp.Second == 17);
+ 
+-            Assertion.Assert (entry.IsBinaryFile == false);
+-            Assertion.Assert (entry.IsDirectory == false);
++            Assert.IsTrue (entry.IsBinaryFile == false);
++            Assert.IsTrue (entry.IsDirectory == false);
+ 
+-            Assertion.Assert (entry.FileContents.Equals (CHECKOUT_ENTRY));
++            Assert.IsTrue (entry.FileContents.Equals (CHECKOUT_ENTRY));
+         }
+ 
+         /// <summary>
+@@ -168,32 +168,32 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+         public void TestParseRfc1123Entry () {
+             Entry entry = new Entry (this.settings.Config.LocalPath, CHECKOUT_ENTRY_2);
+ 
+-            Assertion.Assert (entry.Path.Equals (this.settings.Config.LocalPath));
+-            Assertion.Assert (entry.FullPath.Equals (
++            Assert.IsTrue (entry.Path.Equals (this.settings.Config.LocalPath));
++            Assert.IsTrue (entry.FullPath.Equals (
+                 Path.Combine(this.settings.Config.LocalPath, CHECKOUT_ENTRY_2_FILENAME)));
+-            Assertion.Assert (entry.FullPath.Equals (Path.Combine(this.settings.Config.LocalPath, entry.Name)));
+-            Assertion.Assert (entry.Filename.Equals (ENTRY_FILE_NAME));
++            Assert.IsTrue (entry.FullPath.Equals (Path.Combine(this.settings.Config.LocalPath, entry.Name)));
++            Assert.IsTrue (entry.Filename.Equals (ENTRY_FILE_NAME));
+ 
+-            Assertion.Assert (entry.Name.Equals ("EntryTest.cs"));
+-            Assertion.Assert (entry.Revision.Equals ("1.1"));
++            Assert.IsTrue (entry.Name.Equals ("EntryTest.cs"));
++            Assert.IsTrue (entry.Revision.Equals ("1.1"));
+             // TODO: check what format the date should come back in
+-            //Assertion.Assert (entry.Date, entry.Date.Equals ("Fri Jan 03 04:07:36"));
+-            Assertion.Assert (entry.Date, entry.Date.Equals ("03 Jan 2003 04:07:36 -0000"));
+-            Assertion.Assert (entry.Conflict == null);
+-            Assertion.Assert (entry.Options.Equals (""));
+-            Assertion.Assert (entry.Tag.Equals (""));
+-
+-            Assertion.AssertEquals (3, entry.TimeStamp.Day);
+-            Assertion.AssertEquals (1, entry.TimeStamp.Month);
+-            Assertion.AssertEquals (2003, entry.TimeStamp.Year);
+-            Assertion.AssertEquals (4, entry.TimeStamp.Hour);
+-            Assertion.AssertEquals (7, entry.TimeStamp.Minute);
+-            Assertion.AssertEquals (36, entry.TimeStamp.Second);
++            //Assert.IsTrue (entry.Date, entry.Date.Equals ("Fri Jan 03 04:07:36"));
++            Assert.IsTrue (entry.Date.Equals ("03 Jan 2003 04:07:36 -0000"), entry.Date);
++            Assert.IsTrue (entry.Conflict == null);
++            Assert.IsTrue (entry.Options.Equals (""));
++            Assert.IsTrue (entry.Tag.Equals (""));
++
++            Assert.AreEqual (3, entry.TimeStamp.Day);
++            Assert.AreEqual (1, entry.TimeStamp.Month);
++            Assert.AreEqual (2003, entry.TimeStamp.Year);
++            Assert.AreEqual (4, entry.TimeStamp.Hour);
++            Assert.AreEqual (7, entry.TimeStamp.Minute);
++            Assert.AreEqual (36, entry.TimeStamp.Second);
+ 
+-            Assertion.AssertEquals (entry.IsBinaryFile, false);
+-            Assertion.AssertEquals (entry.IsDirectory, false);
++            Assert.AreEqual (entry.IsBinaryFile, false);
++            Assert.AreEqual (entry.IsDirectory, false);
+ 
+-            Assertion.Assert (entry.FileContents.Equals (NORMALISED_ENTRY_2));
++            Assert.IsTrue (entry.FileContents.Equals (NORMALISED_ENTRY_2));
+         }
+ 
+         /// <summary>
+@@ -203,19 +203,19 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+         public void TestParseFullCheckoutEntry () {
+             Entry entry = new Entry (this.settings.Config.LocalPath, CHECKOUT_ENTRY_3);
+ 
+-            Assertion.Assert (entry.Name.Equals ("ICSharpCode.SharpZipLib.dll"));
+-            Assertion.Assert (entry.FullPath.Equals (
++            Assert.IsTrue (entry.Name.Equals ("ICSharpCode.SharpZipLib.dll"));
++            Assert.IsTrue (entry.FullPath.Equals (
+                 Path.Combine(this.settings.Config.LocalPath, CHECKOUT_ENTRY_3_FILENAME)));
+-            Assertion.Assert (entry.Revision.Equals ("1.2"));
+-            Assertion.Assert (entry.Date.Equals ("Sat Jun 21 03:22:02 2003"));
+-            Assertion.Assert (entry.Conflict.Equals ("Sat Jun 21 03:22:03 2003"));
+-            Assertion.Assert (entry.Options.Equals ("-kb"));
+-            Assertion.Assert (entry.Tag.Equals ("TV1.0"));
++            Assert.IsTrue (entry.Revision.Equals ("1.2"));
++            Assert.IsTrue (entry.Date.Equals ("Sat Jun 21 03:22:02 2003"));
++            Assert.IsTrue (entry.Conflict.Equals ("Sat Jun 21 03:22:03 2003"));
++            Assert.IsTrue (entry.Options.Equals ("-kb"));
++            Assert.IsTrue (entry.Tag.Equals ("TV1.0"));
+ 
+-            Assertion.Assert (entry.IsBinaryFile == true);
+-            Assertion.Assert (entry.IsDirectory == false);
++            Assert.IsTrue (entry.IsBinaryFile == true);
++            Assert.IsTrue (entry.IsDirectory == false);
+ 
+-            Assertion.Assert (entry.FileContents.Equals (CHECKOUT_ENTRY_3));
++            Assert.IsTrue (entry.FileContents.Equals (CHECKOUT_ENTRY_3));
+         }
+ 
+         /// <summary>
+@@ -228,9 +228,9 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+         [Test]
+         public void TestParseDirEntry () {
+             Entry entry = new Entry (this.settings.Config.LocalPath, DIR_ENTRY);
+-            Assertion.AssertEquals(Path.Combine(this.settings.Config.LocalPath, DIR_ENTRY_DIRNAME) + Path.DirectorySeparatorChar,
++            Assert.AreEqual(Path.Combine(this.settings.Config.LocalPath, DIR_ENTRY_DIRNAME) + Path.DirectorySeparatorChar,
+                 entry.FullPath);
+-            Assertion.Assert (entry.IsDirectory == true);
++            Assert.IsTrue (entry.IsDirectory == true);
+ 
+         }
+ 
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/FactoryTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/FactoryTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/FactoryTest.cs.cleanups	2008-04-10 12:25:42.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/FactoryTest.cs	2008-04-10 12:28:36.000000000 -0400
+@@ -87,10 +87,10 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             String path = this.settings.Config.LocalPath;
+ 
+             ICvsFile cvsFile = factory.CreateCvsObject (path, Factory.FileType.Entries, ENTRY_LINE);
+-            Assertion.Assert (cvsFile is Entry);
+-            Assertion.Assert (cvsFile.Path.Equals (path));
+-            Assertion.Assert (cvsFile.FullPath.Equals (Path.Combine(path, ENTRY_NAME_OF_FILE)));
+-            Assertion.Assert (cvsFile.FileContents.Equals (ENTRY_LINE));
++            Assert.IsTrue (cvsFile is Entry);
++            Assert.IsTrue (cvsFile.Path.Equals (path));
++            Assert.IsTrue (cvsFile.FullPath.Equals (Path.Combine(path, ENTRY_NAME_OF_FILE)));
++            Assert.IsTrue (cvsFile.FileContents.Equals (ENTRY_LINE));
+         }
+ 
+         /// <summary>
+@@ -101,9 +101,9 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             String fullPath = this.settings.Config.LocalPath;
+ 
+             ICvsFile cvsFile = factory.CreateCvsObject (fullPath, Factory.FileType.Repository, REPOSITORY_LINE);
+-            Assertion.Assert (cvsFile is Repository);
+-            Assertion.AssertEquals (fullPath, cvsFile.FullPath);
+-            Assertion.AssertEquals (REPOSITORY_LINE, cvsFile.FileContents);
++            Assert.IsTrue (cvsFile is Repository);
++            Assert.AreEqual (fullPath, cvsFile.FullPath);
++            Assert.AreEqual (REPOSITORY_LINE, cvsFile.FileContents);
+         }
+ 
+         /// <summary>
+@@ -114,9 +114,9 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             String fullPath = this.settings.Config.LocalPath;
+ 
+             ICvsFile cvsFile = factory.CreateCvsObject (fullPath, Factory.FileType.Root, ROOT_LINE);
+-            Assertion.Assert (cvsFile is Root);
+-            Assertion.AssertEquals (fullPath, cvsFile.FullPath);
+-            Assertion.AssertEquals (ROOT_LINE, cvsFile.FileContents);
++            Assert.IsTrue (cvsFile is Root);
++            Assert.AreEqual (fullPath, cvsFile.FullPath);
++            Assert.AreEqual (ROOT_LINE, cvsFile.FileContents);
+         }
+ 
+         /// <summary>
+@@ -127,9 +127,9 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             String fullPath = this.settings.Config.LocalPath;
+ 
+             ICvsFile cvsFile = factory.CreateCvsObject (fullPath, Factory.FileType.Tag, TAG_LINE);
+-            Assertion.Assert (cvsFile is Tag);
+-            Assertion.AssertEquals (fullPath, cvsFile.FullPath);
+-            Assertion.AssertEquals ("N" + TAG_LINE.Substring (1),
++            Assert.IsTrue (cvsFile is Tag);
++            Assert.AreEqual (fullPath, cvsFile.FullPath);
++            Assert.AreEqual ("N" + TAG_LINE.Substring (1),
+                                     cvsFile.FileContents);
+         }
+ 
+@@ -138,10 +138,10 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+         /// </summary>
+         [Test]
+         public void CheckFilenamesTest () {
+-            Assertion.Assert (factory.GetFilename (Factory.FileType.Entries).Equals (ENTRY_FILE_NAME));
+-            Assertion.Assert (factory.GetFilename (Factory.FileType.Repository).Equals (REPOSITORY_FILE_NAME));
+-            Assertion.Assert (factory.GetFilename (Factory.FileType.Root).Equals (ROOT_FILE_NAME));
+-            Assertion.Assert (factory.GetFilename (Factory.FileType.Tag).Equals (TAG_FILE_NAME));
++            Assert.IsTrue (factory.GetFilename (Factory.FileType.Entries).Equals (ENTRY_FILE_NAME));
++            Assert.IsTrue (factory.GetFilename (Factory.FileType.Repository).Equals (REPOSITORY_FILE_NAME));
++            Assert.IsTrue (factory.GetFilename (Factory.FileType.Root).Equals (ROOT_FILE_NAME));
++            Assert.IsTrue (factory.GetFilename (Factory.FileType.Tag).Equals (TAG_FILE_NAME));
+         }
+ 
+         /// <summary>
+@@ -149,10 +149,10 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+         /// </summary>
+         [Test]
+         public void CheckFileTypesTest () {
+-            Assertion.AssertEquals (Factory.FileType.Entries, factory.GetFileType(ENTRY_FILE_NAME));
+-            Assertion.AssertEquals (Factory.FileType.Repository, factory.GetFileType(REPOSITORY_FILE_NAME));
+-            Assertion.AssertEquals (Factory.FileType.Root, factory.GetFileType(ROOT_FILE_NAME));
+-            Assertion.AssertEquals (Factory.FileType.Tag, factory.GetFileType(TAG_FILE_NAME));
++            Assert.AreEqual (Factory.FileType.Entries, factory.GetFileType(ENTRY_FILE_NAME));
++            Assert.AreEqual (Factory.FileType.Repository, factory.GetFileType(REPOSITORY_FILE_NAME));
++            Assert.AreEqual (Factory.FileType.Root, factory.GetFileType(ROOT_FILE_NAME));
++            Assert.AreEqual (Factory.FileType.Tag, factory.GetFileType(TAG_FILE_NAME));
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/ManagerTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/ManagerTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/ManagerTest.cs.cleanups	2008-04-10 12:29:02.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/ManagerTest.cs	2008-04-10 12:35:31.000000000 -0400
+@@ -180,7 +180,7 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+                                 Factory.FileType.Entries,
+                                 this.cvsEntries.Length + 1);
+ 
+-            Assertion.Assert(!Directory.Exists(Path.Combine(this.GetTempPath(), "CVS")));
++            Assert.IsTrue(!Directory.Exists(Path.Combine(this.GetTempPath(), "CVS")));
+ 
+         }
+ 
+@@ -216,7 +216,7 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+ 
+             Entries entriesTest = manager.FetchEntries(((Entry)(entries[0])).FullPath);
+ 
+-            Assertion.Assert(File.Exists(Path.Combine(Path.Combine(path, "CVS"), "Entries")));
++            Assert.IsTrue(File.Exists(Path.Combine(Path.Combine(path, "CVS"), "Entries")));
+         }
+ 
+         private void WriteTestDirectoryEntries (String path) {
+@@ -258,7 +258,7 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+                 manager.Fetch (path, fileType);
+             LOGGER.Error("path=[" + path + "]");
+             int entriesFound = currentEntries.Length;
+-            Assertion.AssertEquals (entriesExpected, entriesFound);
++            Assert.AreEqual (entriesExpected, entriesFound);
+         }
+ 
+         /// <summary>
+@@ -287,15 +287,15 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             manager.AddDirectories(modulePath);
+ 
+             Entries entries = manager.FetchEntries(modulePath + Path.DirectorySeparatorChar);
+-            Assertion.Assert(entries.Contains(Path.Combine(modulePath, directories[1])));
++            Assert.IsTrue(entries.Contains(Path.Combine(modulePath, directories[1])));
+ 
+-            Assertion.Assert(entries.Contains(Path.Combine(modulePath, directories[3])));
++            Assert.IsTrue(entries.Contains(Path.Combine(modulePath, directories[3])));
+ 
+             foreach (DictionaryEntry entryDic in entries) {
+                 LOGGER.Debug("entry=[" + entryDic.Value + "]");
+             }
+-            Assertion.AssertEquals 
+-                ("Did not find all directory names in entries file.", 4, entries.Count);
++            Assert.AreEqual 
++                (4, entries.Count, "Did not find all directory names in entries file.");
+         }
+ 
+         /// <summary>
+@@ -320,15 +320,11 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             Directory.CreateDirectory (Path.Combine (newDirectory, manager.CVS));
+ 
+             manager.AddDirectories (path);
+-            Assertion.Assert ("Should contain the directory entry.",
+-                            null != manager.Find (path, NEW_DIRECTORY + Path.DirectorySeparatorChar));
+-            Assertion.Assert ("There should be no cvs entry above the root directory.",
+-                            !Directory.Exists (Path.Combine (this.settings.Config.LocalPath,
+-                                                            manager.CVS)));
++            Assert.IsTrue (null != manager.Find (path, NEW_DIRECTORY + Path.DirectorySeparatorChar), "Should contain the directory entry.");
++            Assert.IsTrue (!Directory.Exists (Path.Combine (this.settings.Config.LocalPath, manager.CVS)), "There should be no cvs entry above the root directory.");
+             String modulePath = 
+                 Path.Combine(this.settings.Config.LocalPath, this.settings.Module);
+-            Assertion.Assert("Should not create cvs entry for module path.",
+-                !Directory.Exists(Path.Combine(modulePath, this.settings.Module)));
++            Assert.IsTrue (!Directory.Exists(Path.Combine(modulePath, this.settings.Module)), "Should not create cvs entry for module path.");
+ 
+             Entries entries = manager.FetchEntries(Path.Combine(modulePath, Entry.FILE_NAME));
+             entries.Contains(Path.Combine(modulePath, "CvsFileManager"));
+@@ -363,8 +359,7 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             manager.AddRepository(repository);
+             working.FoldersToUpdate = manager.FetchFilesToUpdate (rootDir);
+ 
+-            Assertion.Assert ("Working folders count should be greater than 1.",
+-                            working.FoldersToUpdate.Length > 1);
++            Assert.IsTrue (working.FoldersToUpdate.Length > 1, "Working folders count should be greater than 1.");
+         }
+ 
+         private bool IsInEntries (Entry entry, Entry[] entries) {
+@@ -384,10 +379,10 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+                                     this.settings.Config.Module);
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             ICommand command = new CheckoutModuleCommand (working);
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             connection.Connect (working, this.settings.Config.ValidPassword);
+ 
+@@ -417,7 +412,7 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             {
+                 manager.Fetch (rootDir, Factory.FileType.Entries);
+             } catch (FileNotFoundException) {
+-                Assertion.Assert ("Should not be here, this should be trapped.", true);
++                Assert.IsTrue (true, "Should not be here, this should be trapped.");
+             }
+         }
+ 
+@@ -462,7 +457,7 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+ 
+             // TODO: This is a bad test, however the DateTime.ToUniversalTime () method
+             //    is broken in .net 1.0
+-            Assertion.AssertEquals (entry.TimeStamp,
++            Assert.AreEqual (entry.TimeStamp,
+                                     File.GetLastWriteTime(filenameAndPath).Subtract (System.TimeZone.CurrentTimeZone.GetUtcOffset (entry.TimeStamp)));
+ 
+         }
+@@ -482,9 +477,9 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+ 
+             LOGGER.Debug("Folders=[" + folders + "]");
+ 
+-            Assertion.AssertEquals(2, folders.Count);
+-            Assertion.Assert(folders.Contains(modulePath));
+-            Assertion.Assert(folders.Contains(Path.Combine(modulePath, "src")));
++            Assert.AreEqual(2, folders.Count);
++            Assert.IsTrue(folders.Contains(modulePath));
++            Assert.IsTrue(folders.Contains(Path.Combine(modulePath, "src")));
+         }
+ 
+         /// <summary>
+@@ -525,12 +520,12 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             Manager manager = new Manager(workingPath);
+             for (int i = 0; i < cvsDirIn.Length; i++) {
+                 try {
+-                    Assertion.AssertEquals("cvsDir number=[" + i + "]", 
++                    Assert.AreEqual("cvsDir number=[" + i + "]", 
+                         cvsDirOut[i], manager.GetCvsDir(Entry.CreateEntry(cvsDirIn[i])));
+                 } catch (EntryParseException e) {
+                     LOGGER.Error(e);
+                     if (!(cvsDirIn[i].IndexOf(manager.CVS) >= 0)) {
+-                        Assertion.Fail("The only reason a parse exception should be thrown is if the " +
++                        Assert.Fail("The only reason a parse exception should be thrown is if the " +
+                             "file contains a CVS management folder.  File=[" + cvsDirIn[i] + "]");
+                     }
+                 }
+@@ -553,12 +548,12 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+                 LOGGER.Debug("entry.FullPath=[" + entry.FullPath + "]");
+                 LOGGER.Debug("entry.Path=[" + entry.Path + "]");
+             }
+-            Assertion.Assert(entries1.Contains(Path.Combine(modulePath, this.settings.TargetFile)));
+-            Assertion.Assert(entries1.Contains(Path.Combine(modulePath, "src") + Path.DirectorySeparatorChar.ToString()));
++            Assert.IsTrue(entries1.Contains(Path.Combine(modulePath, this.settings.TargetFile)));
++            Assert.IsTrue(entries1.Contains(Path.Combine(modulePath, "src") + Path.DirectorySeparatorChar.ToString()));
+ 
+             String srcDir = Path.Combine(modulePath, "src");
+             Entries entries2 = manager.FetchEntries(srcDir);
+-            Assertion.Assert(entries2.Contains(Path.Combine(srcDir, "test-file-2.txt")));
++            Assert.IsTrue(entries2.Contains(Path.Combine(srcDir, "test-file-2.txt")));
+ 
+             this.CleanTempDirectory();
+         }
+@@ -574,9 +569,9 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             String modulePath = Path.Combine(this.settings.LocalPath, this.settings.Module);
+             Manager manager = new Manager(modulePath);
+             Root root1 = manager.FetchRoot(modulePath);
+-            Assertion.AssertEquals(this.settings.Cvsroot, root1.FileContents);
++            Assert.AreEqual(this.settings.Cvsroot, root1.FileContents);
+             Root root2 = manager.FetchRoot(Path.Combine(modulePath, "src"));
+-            Assertion.AssertEquals(this.settings.Cvsroot, root2.FileContents);
++            Assert.AreEqual(this.settings.Cvsroot, root2.FileContents);
+ 
+             this.CleanTempDirectory();
+         }
+@@ -592,9 +587,9 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             String modulePath = Path.Combine(this.settings.LocalPath, this.settings.Module);
+             Manager manager = new Manager(modulePath);
+             Repository repository1 = manager.FetchRepository(modulePath);
+-            Assertion.AssertEquals(this.settings.Module, repository1.FileContents);
++            Assert.AreEqual(this.settings.Module, repository1.FileContents);
+             Repository repository2 = manager.FetchRepository(Path.Combine(modulePath, "src"));
+-            Assertion.AssertEquals(this.settings.Module + "/" + "src", repository2.FileContents);
++            Assert.AreEqual(this.settings.Module + "/" + "src", repository2.FileContents);
+ 
+             this.CleanTempDirectory();
+         }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/PathTranslatorTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/PathTranslatorTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/PathTranslatorTest.cs.cleanups	2008-04-10 12:35:50.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/PathTranslatorTest.cs	2008-04-10 12:43:24.000000000 -0400
+@@ -133,15 +133,14 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             pathTranslator = new PathTranslator (workingDirectory, REPOS_FILE_PATH1);
+ 
+             LOGGER.Debug ("pathTranslator=[" + pathTranslator.ToString () + "]");
+-            Assertion.Assert (pathTranslator.CvsRoot.CvsRepository,
+-                            pathTranslator.CvsRoot.CvsRepository.Equals ("/cvsroot/sharpcvslib"));
+-            Assertion.AssertEquals ("src/ICSharpCode/SharpCvsLib/FileSystem/", pathTranslator.RelativePath);
+-            Assertion.Assert (pathTranslator.Filename, pathTranslator.Filename.Equals ("PathTranslator.cs"));
++            Assert.IsTrue (pathTranslator.CvsRoot.CvsRepository.Equals ("/cvsroot/sharpcvslib"), pathTranslator.CvsRoot.CvsRepository);
++            Assert.AreEqual ("src/ICSharpCode/SharpCvsLib/FileSystem/", pathTranslator.RelativePath);
++            Assert.IsTrue (pathTranslator.Filename.Equals ("PathTranslator.cs"), pathTranslator.Filename);
+             String expectedLocalPath =
+                 PathTranslator.ConvertToOSSpecificPath (Path.Combine (LOCAL_DIR1, "src/ICSharpCode/SharpCvsLib/FileSystem/"));
+-            Assertion.AssertEquals (pathTranslator.LocalPath, expectedLocalPath, pathTranslator.LocalPath);
+-            Assertion.Assert (pathTranslator.LocalPathAndFilename, pathTranslator.LocalPathAndFilename.Equals (Path.Combine (expectedLocalPath, "PathTranslator.cs")));
+-            Assertion.Assert (pathTranslator.IsDirectory == false);
++            Assert.AreEqual (expectedLocalPath, pathTranslator.LocalPath, pathTranslator.LocalPath);
++            Assert.IsTrue (pathTranslator.LocalPathAndFilename.Equals (Path.Combine (expectedLocalPath, "PathTranslator.cs")), pathTranslator.LocalPathAndFilename);
++            Assert.IsTrue (pathTranslator.IsDirectory == false);
+         }
+ 
+         /// <summary>
+@@ -157,15 +156,14 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             workingDirectory = new WorkingDirectory (cvsRoot, LOCAL_ROOT_DIR1, REPOS_NAME1);
+             pathTranslator = new PathTranslator (workingDirectory, REPOS_DIR_PATH1);
+ 
+-            Assertion.Assert (pathTranslator.CvsRoot.CvsRepository,
+-                            pathTranslator.CvsRoot.CvsRepository.Equals ("/cvsroot/sharpcvslib"));
+-            Assertion.AssertEquals (pathTranslator.RelativePath, "src/ICSharpCode/SharpCvsLib/FileSystem/", pathTranslator.RelativePath);
+-            Assertion.AssertEquals (Path.DirectorySeparatorChar.ToString(), pathTranslator.Filename);
++            Assert.IsTrue (pathTranslator.CvsRoot.CvsRepository.Equals ("/cvsroot/sharpcvslib"), pathTranslator.CvsRoot.CvsRepository);
++            Assert.AreEqual ("src/ICSharpCode/SharpCvsLib/FileSystem/", pathTranslator.RelativePath, pathTranslator.RelativePath);
++            Assert.AreEqual (Path.DirectorySeparatorChar.ToString(), pathTranslator.Filename);
+             String expectedLocalPath =
+                 PathTranslator.ConvertToOSSpecificPath (Path.Combine (LOCAL_DIR1, "src/ICSharpCode/SharpCvsLib/FileSystem/"));
+-            Assertion.AssertEquals (pathTranslator.LocalPath, expectedLocalPath, pathTranslator.LocalPath);
+-            Assertion.AssertEquals (expectedLocalPath, pathTranslator.LocalPathAndFilename);
+-            Assertion.Assert (pathTranslator.IsDirectory == true);
++            Assert.AreEqual (expectedLocalPath, pathTranslator.LocalPath, pathTranslator.LocalPath);
++            Assert.AreEqual (expectedLocalPath, pathTranslator.LocalPathAndFilename);
++            Assert.IsTrue (pathTranslator.IsDirectory == true);
+         }
+ 
+         /// <summary>
+@@ -182,14 +180,14 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             workingDirectory = new WorkingDirectory (cvsRoot, LOCAL_ROOT_DIR1, REPOS_NAME1);
+             pathTranslator = new PathTranslator (workingDirectory, REPOS_FILE_PATH2);
+ 
+-            Assertion.Assert (pathTranslator.CvsRoot.CvsRepository, pathTranslator.CvsRoot.CvsRepository.Equals ("/cvsroot/sharpcvslib"));
+-            Assertion.AssertEquals ("src/ICSharpCode/SharpCvsLib/FileSystem/", pathTranslator.RelativePath);
+-            Assertion.Assert (pathTranslator.Filename, pathTranslator.Filename.Equals ("Sharp"));
++            Assert.IsTrue (pathTranslator.CvsRoot.CvsRepository.Equals ("/cvsroot/sharpcvslib"), pathTranslator.CvsRoot.CvsRepository);
++            Assert.AreEqual ("src/ICSharpCode/SharpCvsLib/FileSystem/", pathTranslator.RelativePath);
++            Assert.IsTrue (pathTranslator.Filename.Equals ("Sharp"), pathTranslator.Filename);
+             String expectedLocalPath =
+                 PathTranslator.ConvertToOSSpecificPath (Path.Combine (LOCAL_DIR1, "src/ICSharpCode/SharpCvsLib/FileSystem/"));
+-            Assertion.Assert (pathTranslator.LocalPath, pathTranslator.LocalPath.Equals (expectedLocalPath));
+-            Assertion.Assert (pathTranslator.LocalPathAndFilename, pathTranslator.LocalPathAndFilename.Equals (Path.Combine (expectedLocalPath, "Sharp")));
+-            Assertion.Assert (pathTranslator.IsDirectory == false);
++            Assert.IsTrue (pathTranslator.LocalPath.Equals (expectedLocalPath), pathTranslator.LocalPath);
++            Assert.IsTrue (pathTranslator.LocalPathAndFilename.Equals (Path.Combine (expectedLocalPath, "Sharp")), pathTranslator.LocalPathAndFilename);
++            Assert.IsTrue (pathTranslator.IsDirectory == false);
+         }
+ 
+         /// <summary>
+@@ -199,15 +197,15 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+         /// </summary>
+         [Test]
+         public void TestContainsCvsDirectory () {
+-            Assertion.Assert(PathTranslator.ContainsCVS ("c:\\temp\\CVS"));
+-            Assertion.Assert(PathTranslator.ContainsCVS ("c:\\temp\\cvs"));
+-            Assertion.Assert(PathTranslator.ContainsCVS ("c:\\temp\\cVs"));
+-            Assertion.Assert(PathTranslator.ContainsCVS ("c:\\temp\\cVs\\Crap"));
+-            Assertion.Assert(!PathTranslator.ContainsCVS ("c:\\temp\\testCvs\\"));
+-            Assertion.Assert(!PathTranslator.ContainsCVS ("c:\\temp\\CVSFile"));
+-            Assertion.Assert(PathTranslator.ContainsCVS(
++            Assert.IsTrue(PathTranslator.ContainsCVS ("c:\\temp\\CVS"));
++            Assert.IsTrue(PathTranslator.ContainsCVS ("c:\\temp\\cvs"));
++            Assert.IsTrue(PathTranslator.ContainsCVS ("c:\\temp\\cVs"));
++            Assert.IsTrue(PathTranslator.ContainsCVS ("c:\\temp\\cVs\\Crap"));
++            Assert.IsTrue(!PathTranslator.ContainsCVS ("c:\\temp\\testCvs\\"));
++            Assert.IsTrue(!PathTranslator.ContainsCVS ("c:\\temp\\CVSFile"));
++            Assert.IsTrue(PathTranslator.ContainsCVS(
+                 "C:\\Documents and Settings\\Administrator\\Local Settings\\Temp\\sharpcvslib-tests\\sharpcvslib-test-repository\\conf\\CVS\\conf"));
+-            Assertion.Assert(PathTranslator.ContainsCVS(
++            Assert.IsTrue(PathTranslator.ContainsCVS(
+                 "C:\\DOCUME~1\\ADMINI~1\\LOCALS~1\\Temp\\sharpcvslib-tests\\sharpcvslib-test-repository\\test\\CVS"));
+         }
+ 
+@@ -224,13 +222,13 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             PathTranslator pathTranslator = 
+                 new PathTranslator (workingDirectory, REPOS_DIR_PATH1);
+ 
+-            Assertion.AssertEquals("src/ICSharpCode/SharpCvsLib/FileSystem/", pathTranslator.RelativePath);
+-            Assertion.AssertEquals (Path.DirectorySeparatorChar.ToString(), pathTranslator.Filename);
++            Assert.AreEqual("src/ICSharpCode/SharpCvsLib/FileSystem/", pathTranslator.RelativePath);
++            Assert.AreEqual (Path.DirectorySeparatorChar.ToString(), pathTranslator.Filename);
+             String expectedLocalPath =
+                 PathTranslator.ConvertToOSSpecificPath (Path.Combine (LOCAL_DIR1, "src/ICSharpCode/SharpCvsLib/FileSystem/"));
+-            Assertion.AssertEquals(expectedLocalPath, pathTranslator.LocalPath);
+-            Assertion.AssertEquals (expectedLocalPath, pathTranslator.LocalPathAndFilename);
+-            Assertion.Assert (pathTranslator.IsDirectory == true);
++            Assert.AreEqual(expectedLocalPath, pathTranslator.LocalPath);
++            Assert.AreEqual (expectedLocalPath, pathTranslator.LocalPathAndFilename);
++            Assert.IsTrue (pathTranslator.IsDirectory == true);
+ 
+         }
+ 
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/ProbeTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/ProbeTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/ProbeTest.cs.cleanups	2008-04-10 12:43:51.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/ProbeTest.cs	2008-04-10 12:45:13.000000000 -0400
+@@ -62,12 +62,11 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             probe.Start = searchDir;
+ 
+             probe.Execute();
+-            Assertion.AssertNotNull(probe.Files);
++            Assert.IsNotNull(probe.Files);
+             foreach (String file in probe.Files) {
+                 LOGGER.Debug ("file=[" + file + "]");
+             }
+-            Assertion.Assert("File count=[" + probe.Files.Count.ToString() + "]", 
+-                probe.Files.Count == 0);
++            Assert.IsTrue(probe.Files.Count == 0, "File count=[" + probe.Files.Count.ToString() + "]");
+         }
+ 
+         /// <summary>
+@@ -81,8 +80,8 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+ 
+             probe.Execute();
+ 
+-            Assertion.AssertNotNull(probe.Files);
+-            Assertion.Assert(probe.Files.Count > 0);
++            Assert.IsNotNull(probe.Files);
++            Assert.IsTrue(probe.Files.Count > 0);
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/RepositoryTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/RepositoryTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/RepositoryTest.cs.cleanups	2008-04-10 12:45:38.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/RepositoryTest.cs	2008-04-10 12:49:50.000000000 -0400
+@@ -82,12 +82,12 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+                                             this.REPOSITORY_ENTRY1);
+ 
+             String cvsPath = Path.Combine (fullPath, "CVS");
+-            Assertion.AssertEquals ("Path not set/returned", fullPath, repos.FullPath);
+-            Assertion.AssertEquals ("FileContents not set/returned", this.REPOSITORY_ENTRY1, repos.FileContents);
+-            Assertion.AssertEquals ("Filename not correct", this.REPOSITORY_FILE_NAME, repos.Filename);
+-            Assertion.AssertEquals ("Type not correct", Factory.FileType.Repository, repos.Type);
+-            Assertion.AssertEquals ("IsMultiLined not correct", false, repos.IsMultiLined);
+-            Assertion.AssertEquals(MODULE_NAME, repos.ModuleName);
++            Assert.AreEqual (fullPath, repos.FullPath, "Path not set/returned");
++            Assert.AreEqual (this.REPOSITORY_ENTRY1, repos.FileContents, "FileContents not set/returned");
++            Assert.AreEqual (this.REPOSITORY_FILE_NAME, repos.Filename, "Filename not correct");
++            Assert.AreEqual (Factory.FileType.Repository, repos.Type, "Type not correct");
++            Assert.AreEqual (false, repos.IsMultiLined, "IsMultiLined not correct");
++            Assert.AreEqual(MODULE_NAME, repos.ModuleName);
+         }
+ 
+         /// <summary>
+@@ -102,18 +102,18 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             Repository reposSame2 = new Repository (cvsPath, this.REPOSITORY_ENTRY1);
+             Repository reposDiff1 = new Repository (cvsPath, this.REPOSITORY_ENTRY2);
+ 
+-            Assertion.Assert (reposSame1.Equals (reposSame1));
+-            Assertion.Assert (reposSame1.Equals (reposSame2));
+-            Assertion.Assert (reposSame2.Equals (reposSame1));
+-
+-            Assertion.Assert (!reposDiff1.Equals (reposSame1));
+-            Assertion.Assert (!reposDiff1.Equals (reposSame2));
+-            Assertion.Assert (!reposSame1.Equals (reposDiff1));
+-            Assertion.Assert (!reposSame2.Equals (reposDiff1));
+-
+-            Assertion.AssertEquals(MODULE_NAME, reposSame1.ModuleName);
+-            Assertion.AssertEquals(MODULE_NAME, reposSame2.ModuleName);
+-            Assertion.AssertEquals(MODULE_NAME, reposDiff1.ModuleName);
++            Assert.IsTrue (reposSame1.Equals (reposSame1));
++            Assert.IsTrue (reposSame1.Equals (reposSame2));
++            Assert.IsTrue (reposSame2.Equals (reposSame1));
++
++            Assert.IsTrue (!reposDiff1.Equals (reposSame1));
++            Assert.IsTrue (!reposDiff1.Equals (reposSame2));
++            Assert.IsTrue (!reposSame1.Equals (reposDiff1));
++            Assert.IsTrue (!reposSame2.Equals (reposDiff1));
++
++            Assert.AreEqual(MODULE_NAME, reposSame1.ModuleName);
++            Assert.AreEqual(MODULE_NAME, reposSame2.ModuleName);
++            Assert.AreEqual(MODULE_NAME, reposDiff1.ModuleName);
+         }
+ 
+         /// <summary>
+@@ -129,18 +129,15 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+ 
+             String repositoryEntryWithSlash = this.REPOSITORY_ENTRY1 + "/";
+ 
+-            Assertion.Assert ("We just added a slash, there should be a slash.",
+-                            repositoryEntryWithSlash.EndsWith ("/"));
++            Assert.IsTrue (repositoryEntryWithSlash.EndsWith ("/"), "We just added a slash, there should be a slash.");
+             Repository repos = new Repository (fullPath,
+                                             repositoryEntryWithSlash);
+ 
+-            Assertion.Assert ("Slash should be stripped off.",
+-                            !repos.FileContents.EndsWith ("/"));
+-            Assertion.Assert ("FileContents should equal module name.  FileContents=[" +
+-                            repos.FileContents + "]",
+-                            repos.FileContents.Equals ("sharpcvslib/src"));
++            Assert.IsTrue (!repos.FileContents.EndsWith ("/"), "Slash should be stripped off.");
++            Assert.IsTrue (repos.FileContents.Equals ("sharpcvslib/src"), "FileContents should equal module name.  FileContents=[" +
++                            repos.FileContents + "]");
+ 
+-            Assertion.AssertEquals(MODULE_NAME, repos.ModuleName);
++            Assert.AreEqual(MODULE_NAME, repos.ModuleName);
+         }
+ 
+         /// <summary>
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/RootTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/RootTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/RootTest.cs.cleanups	2008-04-10 12:50:09.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/RootTest.cs	2008-04-10 12:52:37.000000000 -0400
+@@ -79,11 +79,11 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+                 this.ROOT_ENTRY1);
+ 
+             String cvsPath = Path.Combine (fullPath, "CVS");
+-            Assertion.AssertEquals ("Full path to the Root file is incorrect.", fullPath, root.FullPath);
+-            Assertion.AssertEquals ("FileContents not set/returned", this.ROOT_ENTRY1, root.FileContents);
+-            Assertion.AssertEquals ("Filename not correct", this.ROOT_FILE_NAME, root.Filename);
+-            Assertion.AssertEquals ("Type not correct", Factory.FileType.Root, root.Type);
+-            Assertion.AssertEquals ("IsMultiLined not correct", false, root.IsMultiLined);
++            Assert.AreEqual (fullPath, root.FullPath, "Full path to the Root file is incorrect.");
++            Assert.AreEqual (this.ROOT_ENTRY1, root.FileContents, "FileContents not set/returned");
++            Assert.AreEqual (this.ROOT_FILE_NAME, root.Filename, "Filename not correct");
++            Assert.AreEqual (Factory.FileType.Root, root.Type, "Type not correct");
++            Assert.AreEqual (false, root.IsMultiLined, "IsMultiLined not correct");
+         }
+ 
+         /// <summary>
+@@ -98,14 +98,14 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             Root RootSame2 = new Root (cvsPath, this.ROOT_ENTRY1);
+             Root RootDiff1 = new Root (cvsPath, this.ROOT_ENTRY2);
+ 
+-            Assertion.Assert (RootSame1.Equals (RootSame1));
+-            Assertion.Assert (RootSame1.Equals (RootSame2));
+-            Assertion.Assert (RootSame2.Equals (RootSame1));
++            Assert.IsTrue (RootSame1.Equals (RootSame1));
++            Assert.IsTrue (RootSame1.Equals (RootSame2));
++            Assert.IsTrue (RootSame2.Equals (RootSame1));
+ 
+-            Assertion.Assert (!RootDiff1.Equals (RootSame1));
+-            Assertion.Assert (!RootDiff1.Equals (RootSame2));
+-            Assertion.Assert (!RootSame1.Equals (RootDiff1));
+-            Assertion.Assert (!RootSame2.Equals (RootDiff1));
++            Assert.IsTrue (!RootDiff1.Equals (RootSame1));
++            Assert.IsTrue (!RootDiff1.Equals (RootSame2));
++            Assert.IsTrue (!RootSame1.Equals (RootDiff1));
++            Assert.IsTrue (!RootSame2.Equals (RootDiff1));
+         }
+ 
+         /// <summary>
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/TagTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/TagTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/TagTest.cs.cleanups	2008-04-10 12:52:54.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/FileSystem/TagTest.cs	2008-04-10 12:58:10.000000000 -0400
+@@ -77,13 +77,13 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+                 this.TAG_ENTRY1);
+ 
+             String cvsPath = Path.Combine (fullPath, "CVS");
+-            Assertion.AssertNotNull ("Path not set/returned", tag.FullPath);
+-            Assertion.AssertEquals ("Path not equal", fullPath, tag.FullPath);
+-            Assertion.AssertNotNull ("FileContents not equal", tag.FileContents);
+-            Assertion.AssertEquals ("FileContents not set/returned", "N" + this.TAG_ENTRY1.Substring (1), tag.FileContents);
+-            Assertion.AssertEquals ("Filename not correct", this.TAG_FILE_NAME, tag.Filename);
+-            Assertion.AssertEquals ("Type not correct", Factory.FileType.Tag, tag.Type);
+-            Assertion.AssertEquals ("IsMultiLined not correct", false, tag.IsMultiLined);
++            Assert.IsNotNull (tag.FullPath, "Path not set/returned");
++            Assert.AreEqual (fullPath, tag.FullPath, "Path not equal");
++            Assert.IsNotNull (tag.FileContents, "FileContents not equal");
++            Assert.AreEqual ("N" + this.TAG_ENTRY1.Substring (1), tag.FileContents, "FileContents not set/returned");
++            Assert.AreEqual (this.TAG_FILE_NAME, tag.Filename, "Filename not correct");
++            Assert.AreEqual (Factory.FileType.Tag, tag.Type, "Type not correct");
++            Assert.AreEqual (false, tag.IsMultiLined, "IsMultiLined not correct");
+         }
+ 
+         /// <summary>
+@@ -98,14 +98,14 @@ namespace ICSharpCode.SharpCvsLib.FileSy
+             Tag tagSame2 = new Tag (cvsPath, this.TAG_ENTRY1);
+             Tag tagDiff1 = new Tag (cvsPath, this.TAG_ENTRY2);
+ 
+-            Assertion.Assert (tagSame1.Equals (tagSame1));
+-            Assertion.Assert (tagSame1.Equals (tagSame2));
+-            Assertion.Assert (tagSame2.Equals (tagSame1));
++            Assert.IsTrue (tagSame1.Equals (tagSame1));
++            Assert.IsTrue (tagSame1.Equals (tagSame2));
++            Assert.IsTrue (tagSame2.Equals (tagSame1));
+ 
+-            Assertion.Assert (!tagDiff1.Equals (tagSame1));
+-            Assertion.Assert (!tagDiff1.Equals (tagSame2));
+-            Assertion.Assert (!tagSame1.Equals (tagDiff1));
+-            Assertion.Assert (!tagSame2.Equals (tagDiff1));
++            Assert.IsTrue (!tagDiff1.Equals (tagSame1));
++            Assert.IsTrue (!tagDiff1.Equals (tagSame2));
++            Assert.IsTrue (!tagSame1.Equals (tagDiff1));
++            Assert.IsTrue (!tagSame2.Equals (tagDiff1));
+         }
+ 
+         /// <summary>
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/MainTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/MainTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/MainTest.cs.cleanups	2008-04-10 13:24:21.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/MainTest.cs	2008-04-10 13:25:32.000000000 -0400
+@@ -93,7 +93,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             cvsProcess.WaitForExit(DEFAULT_WAIT_TIME);
+ 
+             // Check the results of process output
+-            Assertion.AssertEquals (Usage.General + "\r\n", output);
++            Assert.AreEqual (Usage.General + "\r\n", output);
+         }
+         /// <summary>
+         ///     Ensure valid option help parameter processing.
+@@ -119,7 +119,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             cvsProcess.WaitForExit(DEFAULT_WAIT_TIME);
+ 
+             // Check the results of process output
+-            Assertion.AssertEquals (Usage.Options + "\r\n", output);
++            Assert.AreEqual (Usage.Options + "\r\n", output);
+ 
+         }		/// <summary>
+         ///     Ensure valid commands help parameter processing.
+@@ -146,7 +146,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             cvsProcess.WaitForExit(DEFAULT_WAIT_TIME);
+ 
+             // Check the results of process output
+-            Assertion.AssertEquals (Usage.Commands + "\r\n", output);
++            Assert.AreEqual (Usage.Commands + "\r\n", output);
+         }
+         /// <summary>
+         ///     Ensure valid synonyms help parameter processing.
+@@ -172,7 +172,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             cvsProcess.WaitForExit(DEFAULT_WAIT_TIME);
+ 
+             // Check the results of process output
+-            Assertion.AssertEquals (Usage.Synonyms + "\r\n", output);
++            Assert.AreEqual (Usage.Synonyms + "\r\n", output);
+         }
+         /// <summary>
+         ///     Ensure invalid help parameter processing.
+@@ -198,7 +198,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             cvsProcess.WaitForExit(DEFAULT_WAIT_TIME);
+ 
+             // Check the results of process output
+-            Assertion.AssertEquals (Usage.General + "\r\n", output);
++            Assert.AreEqual (Usage.General + "\r\n", output);
+         }
+         /// <summary>
+         ///     Ensure no parameters processing.
+@@ -224,7 +224,7 @@ namespace ICSharpCode.SharpCvsLib.Consol
+             cvsProcess.WaitForExit(DEFAULT_WAIT_TIME);
+ 
+             // Check the results of process output
+-            Assertion.AssertEquals (Usage.General + "\r\n", output);
++            Assert.AreEqual (Usage.General + "\r\n", output);
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Messages/UpdateMessageTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Messages/UpdateMessageTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Messages/UpdateMessageTest.cs.cleanups	2008-04-10 12:58:37.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Messages/UpdateMessageTest.cs	2008-04-10 13:00:40.000000000 -0400
+@@ -64,8 +64,7 @@ public class UpdateMessageTest {
+ 
+         String cvsMessage = "U " + MODULE + "/" + REPOSITORY +
+                             "/" + FILENAME;
+-        Assertion.AssertEquals ("Expecting result=[" + cvsMessage + "]",
+-                                message.Message, cvsMessage);
++        Assert.AreEqual (message.Message, cvsMessage, "Expecting result=[" + cvsMessage + "]");
+     }
+ 
+     /// <summary>
+@@ -84,8 +83,7 @@ public class UpdateMessageTest {
+ 
+         System.Console.WriteLine ("made=[" + cvsMessage + "]");
+         System.Console.WriteLine ("generated=[" + message.Message + "]");
+-        Assertion.AssertEquals ("Expecting result=[" + cvsMessage + "]",
+-                                message.Message, cvsMessage);
++        Assert.AreEqual (message.Message, cvsMessage, "Expecting result=[" + cvsMessage + "]");
+     }
+ }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Misc/CvsRootTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Misc/CvsRootTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Misc/CvsRootTest.cs.cleanups	2008-04-10 13:01:14.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Misc/CvsRootTest.cs	2008-04-10 13:02:52.000000000 -0400
+@@ -54,10 +54,10 @@ namespace ICSharpCode.SharpCvsLib.Misc {
+         public void ValidCvsRootTest () {
+             CvsRoot cvsRoot = new CvsRoot (":ext:gne@cvs.sourceforge.net:/cvsroot/sharpcvslib");
+ 
+-            Assertion.AssertEquals("ext", cvsRoot.Protocol);
+-            Assertion.AssertEquals("gne", cvsRoot.User);
+-            Assertion.AssertEquals("cvs.sourceforge.net", cvsRoot.Host);
+-            Assertion.AssertEquals("/cvsroot/sharpcvslib", cvsRoot.CvsRepository);
++            Assert.AreEqual("ext", cvsRoot.Protocol);
++            Assert.AreEqual("gne", cvsRoot.User);
++            Assert.AreEqual("cvs.sourceforge.net", cvsRoot.Host);
++            Assert.AreEqual("/cvsroot/sharpcvslib", cvsRoot.CvsRepository);
+         }
+ 
+         /// <summary>
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Misc/PasswordScramblerTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Misc/PasswordScramblerTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Misc/PasswordScramblerTest.cs.cleanups	2008-04-10 13:03:12.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Misc/PasswordScramblerTest.cs	2008-04-10 13:03:53.000000000 -0400
+@@ -154,16 +154,16 @@ public class PasswordScramblerTest {
+             input = new String(charMapping[index, 0], 1);
+             expectedOutput = "A" + new String(charMapping[index, 1], 1);
+             actualOutput = PasswordScrambler.Scramble(input);
+-            Assertion.Assert(actualOutput.Equals(expectedOutput));
++            Assert.IsTrue(actualOutput.Equals(expectedOutput));
+ 
+             // Just to convince myself that we have iterated over all chars specified in the charMapping
+             if (index == 0)
+             {
+-                Assertion.Assert(input.Equals("!"));
++                Assert.IsTrue(input.Equals("!"));
+             }
+             else if (index == charMapping.GetLength (0) - 1)
+             {
+-                Assertion.Assert(input.Equals("z"));
++                Assert.IsTrue(input.Equals("z"));
+             }
+         }
+     }
+@@ -190,7 +190,7 @@ public class PasswordScramblerTest {
+             expectedOutput.Append(charMapping[index, 1]);
+         }
+         actualOutput = PasswordScrambler.Scramble(input.ToString());
+-        Assertion.Assert(actualOutput.Equals(expectedOutput.ToString()));
++        Assert.IsTrue(actualOutput.Equals(expectedOutput.ToString()));
+     }
+ 
+     /// <summary>
+@@ -213,7 +213,7 @@ public class PasswordScramblerTest {
+         }
+         scrambledOutput = PasswordScrambler.Scramble(input.ToString());
+         descrambledOutput = PasswordScrambler.Descramble(scrambledOutput);
+-        Assertion.Assert(descrambledOutput.Equals(input.ToString()));
++        Assert.IsTrue(descrambledOutput.Equals(input.ToString()));
+     }
+ }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Requests/OtherRequestsTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Requests/OtherRequestsTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Requests/OtherRequestsTest.cs.cleanups	2008-04-10 13:04:29.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Requests/OtherRequestsTest.cs	2008-04-10 13:12:53.000000000 -0400
+@@ -67,8 +67,8 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new AddRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "add");
+-            Assertion.Assert(request.IsResponseExpected);
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(request.IsResponseExpected);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -80,9 +80,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new AnnotateRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "annotate");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -94,12 +94,12 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new ArgumentRequest("arg-data");
+ 
+             MyAssertStringEquals(request.RequestString, "Argument", "arg-data");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
+-            Assertion.AssertEquals(ArgumentRequest.Options.REVISION, "-r");
+-            Assertion.AssertEquals(ArgumentRequest.Options.MODULE_NAME, "-N");
+-            Assertion.AssertEquals(ArgumentRequest.Options.OVERRIDE_DIRECTORY, "-d");
++            Assert.IsTrue(!request.DoesModifyConnection);
++            Assert.AreEqual(ArgumentRequest.Options.REVISION, "-r");
++            Assert.AreEqual(ArgumentRequest.Options.MODULE_NAME, "-N");
++            Assert.AreEqual(ArgumentRequest.Options.OVERRIDE_DIRECTORY, "-d");
+         }
+ 
+         /// <summary>
+@@ -111,9 +111,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new ArgumentxRequest("arg-data");
+ 
+             MyAssertStringEquals(request.RequestString, "Argumentx", "arg-data");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -125,9 +125,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new CaseRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "Case");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -139,9 +139,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new CheckoutRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "co");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -153,9 +153,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new CommitRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "ci");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -167,9 +167,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new DiffRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "diff");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -181,9 +181,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new DirectoryRequest(".", "/cvsroot/myrepos");
+ 
+             MyAssertStringEquals(request.RequestString, "Directory", ".", "/cvsroot/myrepos");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -197,9 +197,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new EntryRequest(entry);
+ 
+             MyAssertStringEquals(request.RequestString, "Entry", entryLine);
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -211,9 +211,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new ExpandModulesRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "expand-modules");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -225,9 +225,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new ExportRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "export");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -240,9 +240,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new GlobalOptionRequest("-q");
+ 
+             MyAssertStringEquals(request.RequestString, "Global_option", "-q");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -254,9 +254,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new GzipFileContents(3);
+ 
+             MyAssertStringEquals(request.RequestString, "gzip-file-contents", "3");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -268,9 +268,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new GzipStreamRequest(3);
+ 
+             MyAssertStringEquals(request.RequestString, "Gzip-stream", "3");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(request.DoesModifyConnection);    // Connection should be modified
++            Assert.IsTrue(request.DoesModifyConnection);    // Connection should be modified
+         }
+ 
+         /// <summary>
+@@ -282,9 +282,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new ImportRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "import");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -296,9 +296,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new InitRequest("/sharpcvslib");
+ 
+             MyAssertStringEquals(request.RequestString, "init", "/sharpcvslib");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -310,9 +310,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+ 
+             // TODO: ModifiedRequest does not allow you to specify the mode!
+             MyAssertStringEquals(request.RequestString, "Is-modified", "test.cs");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -324,9 +324,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new LogRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "log");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -339,9 +339,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+ 
+             // TODO: ModifiedRequest does not allow you to specify the mode!
+             MyAssertStringEquals(request.RequestString, "Modified", "test.cs", "u=rw,g=rw,o=rw");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         // TODO: PServerAuthRequest to be tested elsewhere
+@@ -356,9 +356,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new QuestionableRequest("test.cs");
+ 
+             MyAssertStringEquals(request.RequestString, "Questionable", "test.cs");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -370,9 +370,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new RDiffRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "rdiff");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -384,9 +384,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new RemoveRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "remove");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         // TODO: RequestMethodEventArgs to be tested elsewhere
+@@ -401,9 +401,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new RootRequest("/cvsroot/sharpcvslib");
+ 
+             MyAssertStringEquals(request.RequestString, "Root", "/cvsroot/sharpcvslib");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -415,9 +415,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new StatusRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "status");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -429,9 +429,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new StickyRequest("TV1.1");
+ 
+             MyAssertStringEquals(request.RequestString, "Sticky", "TV1.1");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -443,9 +443,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new TagRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "tag");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -457,9 +457,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new UnchangedRequest("test.cs");
+ 
+             MyAssertStringEquals(request.RequestString, "Unchanged", "test.cs");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -471,9 +471,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new UpdateRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "update");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         // TODO: UploadFileRequest to be tested elsewhere
+@@ -487,9 +487,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new UseUnchangedRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "UseUnchanged");
+-            Assertion.Assert(!request.IsResponseExpected);
++            Assert.IsTrue(!request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -501,9 +501,9 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             IRequest request = new ValidRequestsRequest();
+ 
+             MyAssertStringEquals(request.RequestString, "valid-requests");
+-            Assertion.Assert(request.IsResponseExpected);
++            Assert.IsTrue(request.IsResponseExpected);
+ 
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         // Valid-responses tested in ValidResponsesRequestTest
+@@ -523,7 +523,7 @@ namespace ICSharpCode.SharpCvsLib.Reques
+         {
+             string expectedRequest = String.Format("{0}\n", command);
+ 
+-            Assertion.AssertEquals(requestString, expectedRequest);
++            Assert.AreEqual(requestString, expectedRequest);
+         }
+ 
+         /// <summary>
+@@ -534,7 +534,7 @@ namespace ICSharpCode.SharpCvsLib.Reques
+         {
+             string expectedRequest = String.Format("{0} {1}\n", command, data);
+ 
+-            Assertion.AssertEquals(requestString, expectedRequest);
++            Assert.AreEqual(requestString, expectedRequest);
+         }
+ 
+         /// <summary>
+@@ -546,7 +546,7 @@ namespace ICSharpCode.SharpCvsLib.Reques
+         {
+             string expectedRequest = String.Format("{0} {1}\n{2}\n", command, data, nextLine);
+ 
+-            Assertion.AssertEquals(requestString, expectedRequest);
++            Assert.AreEqual(requestString, expectedRequest);
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Requests/ValidResponsesRequestTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Requests/ValidResponsesRequestTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Requests/ValidResponsesRequestTest.cs.cleanups	2008-04-10 13:13:19.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Requests/ValidResponsesRequestTest.cs	2008-04-10 13:15:30.000000000 -0400
+@@ -68,11 +68,11 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             // split the responses in the request into seperate strings
+             responses = requestString.Split(null);
+ 
+-            Assertion.Assert(responses.Length > 1);
+-            Assertion.AssertEquals(responses[0], "Valid-responses");
++            Assert.IsTrue(responses.Length > 1);
++            Assert.AreEqual(responses[0], "Valid-responses");
+ 
+-            Assertion.Assert(!request.IsResponseExpected);
+-            Assertion.Assert(!request.DoesModifyConnection);
++            Assert.IsTrue(!request.IsResponseExpected);
++            Assert.IsTrue(!request.DoesModifyConnection);
+         }
+ 
+         /// <summary>
+@@ -103,7 +103,7 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             // Check that we really do support each of these responses
+             for (int responseNum = 1; responseNum < responses.Length; responseNum++) {
+                 IResponse response = ResponseFactory.CreateResponse(responses[responseNum]);
+-                Assertion.AssertNotNull(responses[responseNum] + " not really supported", response);
++                Assert.IsNotNull(response, responses[responseNum] + " not really supported");
+             }
+         }
+ 
+@@ -134,7 +134,7 @@ namespace ICSharpCode.SharpCvsLib.Reques
+             responses = requestString.Split(null);
+ 
+             Assembly cvsLibAssembly = Assembly.GetAssembly(request.GetType());
+-            Assertion.AssertNotNull("Can't load sharpcvslib assembly", cvsLibAssembly);
++            Assert.IsNotNull(cvsLibAssembly, "Can't load sharpcvslib assembly");
+ 
+             Type[] types = cvsLibAssembly.GetTypes();
+             foreach(Type t in types) {
+@@ -147,8 +147,7 @@ namespace ICSharpCode.SharpCvsLib.Reques
+                 }
+             }
+ 
+-            Assertion.AssertEquals("Mismatch betwen response classes and the Valid-responses request",
+-                                responseClasses, responses.Length - 1);
++            Assert.AreEqual(responseClasses, responses.Length - 1, "Mismatch betwen response classes and the Valid-responses request");
+         }
+     }
+ }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Streams/CvsStreamTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Streams/CvsStreamTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Streams/CvsStreamTest.cs.cleanups	2008-04-10 13:15:49.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Streams/CvsStreamTest.cs	2008-04-10 13:22:14.000000000 -0400
+@@ -119,9 +119,9 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         public void CanReadTest ()
+         {
+             replyForCanRead = true;
+-            Assertion.Assert(cvsStream.CanRead == replyForCanRead);
++            Assert.IsTrue(cvsStream.CanRead == replyForCanRead);
+             replyForCanRead = false;
+-            Assertion.Assert(cvsStream.CanRead == replyForCanRead);
++            Assert.IsTrue(cvsStream.CanRead == replyForCanRead);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.CanRead.
+@@ -140,9 +140,9 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         public void CanSeekTest ()
+         {
+             replyForCanSeek = true;
+-            Assertion.Assert(cvsStream.CanSeek == replyForCanSeek);
++            Assert.IsTrue(cvsStream.CanSeek == replyForCanSeek);
+             replyForCanSeek = false;
+-            Assertion.Assert(cvsStream.CanSeek == replyForCanSeek);
++            Assert.IsTrue(cvsStream.CanSeek == replyForCanSeek);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.CanSeek.
+@@ -161,9 +161,9 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         public void CanWriteTest ()
+         {
+             replyForCanWrite = true;
+-            Assertion.Assert(cvsStream.CanWrite == replyForCanWrite);
++            Assert.IsTrue(cvsStream.CanWrite == replyForCanWrite);
+             replyForCanWrite = false;
+-            Assertion.Assert(cvsStream.CanWrite == replyForCanWrite);
++            Assert.IsTrue(cvsStream.CanWrite == replyForCanWrite);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.CanWrite.
+@@ -182,9 +182,9 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         public void LengthTest ()
+         {
+             replyForLength = 0;
+-            Assertion.Assert(cvsStream.Length == replyForLength);
++            Assert.IsTrue(cvsStream.Length == replyForLength);
+             replyForLength = 999;
+-            Assertion.Assert(cvsStream.Length == replyForLength);
++            Assert.IsTrue(cvsStream.Length == replyForLength);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.Length.
+@@ -204,15 +204,15 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         {
+             // First test get
+             replyForPosition = 0;
+-            Assertion.Assert(cvsStream.Position == replyForPosition);
++            Assert.IsTrue(cvsStream.Position == replyForPosition);
+             replyForPosition = 999;
+-            Assertion.Assert(cvsStream.Position == replyForPosition);
++            Assert.IsTrue(cvsStream.Position == replyForPosition);
+ 
+             // now test set
+             cvsStream.Position = 111;
+-            Assertion.Assert(valueParamFromPosition == 111);
++            Assert.IsTrue(valueParamFromPosition == 111);
+             cvsStream.Position = 222;
+-            Assertion.Assert(valueParamFromPosition == 222);
++            Assert.IsTrue(valueParamFromPosition == 222);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.Position.
+@@ -235,7 +235,7 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         {
+             flushCalled = false;
+             cvsStream.Flush();
+-            Assertion.Assert(flushCalled);
++            Assert.IsTrue(flushCalled);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.Flush.
+@@ -252,11 +252,11 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         public void SeekTest ()
+         {
+             replyForSeek = 666;
+-            Assertion.Assert(cvsStream.Seek(999, SeekOrigin.Begin) == replyForSeek);
+-            Assertion.Assert(offsetParamFromSeek == 999 && originParamFromSeek == SeekOrigin.Begin);
++            Assert.IsTrue(cvsStream.Seek(999, SeekOrigin.Begin) == replyForSeek);
++            Assert.IsTrue(offsetParamFromSeek == 999 && originParamFromSeek == SeekOrigin.Begin);
+             replyForSeek = 777;
+-            Assertion.Assert(cvsStream.Seek(0, SeekOrigin.End) == replyForSeek);
+-            Assertion.Assert(offsetParamFromSeek == 0 && originParamFromSeek == SeekOrigin.End);
++            Assert.IsTrue(cvsStream.Seek(0, SeekOrigin.End) == replyForSeek);
++            Assert.IsTrue(offsetParamFromSeek == 0 && originParamFromSeek == SeekOrigin.End);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.Seek.
+@@ -276,9 +276,9 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         public void SetLengthTest ()
+         {
+             cvsStream.SetLength(111);
+-            Assertion.Assert(lenParamFromSetLength == 111);
++            Assert.IsTrue(lenParamFromSetLength == 111);
+             cvsStream.SetLength(222);
+-            Assertion.Assert(lenParamFromSetLength == 222);
++            Assert.IsTrue(lenParamFromSetLength == 222);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.SetLength.
+@@ -299,14 +299,14 @@ namespace ICSharpCode.SharpCvsLib.Stream
+ 
+             // First test Write(byte[], int, int)
+             cvsStream.Write(array, 1, 3);
+-            Assertion.Assert(dataParamFromWrite == array &&
++            Assert.IsTrue(dataParamFromWrite == array &&
+                             offsetParamFromWrite == 1 &&
+                             countParamFromWrite == 3);
+ 
+             // Now test Write(byte[])
+             dataParamFromWrite = null;
+             cvsStream.Write(array);
+-            Assertion.Assert(dataParamFromWrite == array &&
++            Assert.IsTrue(dataParamFromWrite == array &&
+                             offsetParamFromWrite == 0 &&
+                             countParamFromWrite == array.Length);
+         }
+@@ -320,11 +320,11 @@ namespace ICSharpCode.SharpCvsLib.Stream
+             String str = "Hello World!";
+             cvsStream.SendString(str);
+ 
+-            Assertion.Assert(dataParamFromWrite.Length == str.Length);
+-            Assertion.Assert(countParamFromWrite == str.Length);
+-            Assertion.Assert(offsetParamFromWrite == 0);
++            Assert.IsTrue(dataParamFromWrite.Length == str.Length);
++            Assert.IsTrue(countParamFromWrite == str.Length);
++            Assert.IsTrue(offsetParamFromWrite == 0);
+             for (int n = 0; n < str.Length; n++) {
+-                Assertion.Assert(str[n] == (char)dataParamFromWrite[n]);
++                Assert.IsTrue(str[n] == (char)dataParamFromWrite[n]);
+             }
+         }
+ 
+@@ -345,9 +345,9 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         public void WriteByteTest ()
+         {
+             cvsStream.WriteByte(42);
+-            Assertion.Assert(byteParamFromWriteByte == 42);
++            Assert.IsTrue(byteParamFromWriteByte == 42);
+             cvsStream.WriteByte(222);
+-            Assertion.Assert(byteParamFromWriteByte == 222);
++            Assert.IsTrue(byteParamFromWriteByte == 222);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.WriteByte.
+@@ -365,7 +365,7 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         {
+             closeCalled = false;
+             cvsStream.Close();
+-            Assertion.Assert(closeCalled);
++            Assert.IsTrue(closeCalled);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.Close.
+@@ -382,9 +382,9 @@ namespace ICSharpCode.SharpCvsLib.Stream
+         public void ReadByteTest ()
+         {
+             replyForReadByte = 42;
+-            Assertion.Assert(cvsStream.ReadByte() == 42);
++            Assert.IsTrue(cvsStream.ReadByte() == 42);
+             replyForReadByte = 222;
+-            Assertion.Assert(cvsStream.ReadByte() == 222);
++            Assert.IsTrue(cvsStream.ReadByte() == 222);
+         }
+         /// <summary>
+         ///     Our 'Base' implementation for Stream.ReadByte.
+@@ -405,16 +405,16 @@ namespace ICSharpCode.SharpCvsLib.Stream
+ 
+             // First test Read(byte[], int, int)
+             replyFromRead = 2;
+-            Assertion.Assert(cvsStream.Read(array, 1, 3) == replyFromRead);
+-            Assertion.Assert(dataParamFromRead == array &&
++            Assert.IsTrue(cvsStream.Read(array, 1, 3) == replyFromRead);
++            Assert.IsTrue(dataParamFromRead == array &&
+                             offsetParamFromRead == 1 &&
+                             countParamFromRead == 3);
+ 
+             // Now test Read(byte[])
+             dataParamFromRead = null;
+             replyFromRead = 4;
+-            Assertion.Assert(cvsStream.Read(array) == replyFromRead);
+-            Assertion.Assert(dataParamFromRead == array &&
++            Assert.IsTrue(cvsStream.Read(array) == replyFromRead);
++            Assert.IsTrue(dataParamFromRead == array &&
+                             offsetParamFromRead == 0 &&
+                             countParamFromRead == array.Length);
+         }
+@@ -453,7 +453,7 @@ namespace ICSharpCode.SharpCvsLib.Stream
+             // and check we have received what we expected.
+             for (int n = 0; n < TEST_DATA.Length; n++)
+             {
+-                Assertion.Assert(TEST_DATA[n] == (char)buffer[n]);
++                Assert.IsTrue(TEST_DATA[n] == (char)buffer[n]);
+             }
+ 
+             cvsStream.BaseStream.Close();
+@@ -477,9 +477,9 @@ namespace ICSharpCode.SharpCvsLib.Stream
+ 
+             // Now read the stream.
+             line = cvsStream.ReadLine();
+-            Assertion.Assert(line.Equals("Hello World!"));
++            Assert.IsTrue(line.Equals("Hello World!"));
+             line = cvsStream.ReadLine();
+-            Assertion.Assert(line.Equals("Goodbye"));
++            Assert.IsTrue(line.Equals("Goodbye"));
+ 
+             cvsStream.BaseStream.Close();
+         }
+@@ -502,11 +502,11 @@ namespace ICSharpCode.SharpCvsLib.Stream
+ 
+             // Now read the stream.
+             word = cvsStream.ReadToFirstWS();
+-            Assertion.Assert(word.Equals("Hello "));
++            Assert.IsTrue(word.Equals("Hello "));
+             word = cvsStream.ReadToFirstWS();
+-            Assertion.Assert(word.Equals("World!\n"));
++            Assert.IsTrue(word.Equals("World!\n"));
+             word = cvsStream.ReadToFirstWS();
+-            Assertion.Assert(word.Equals("Goodbye\n"));
++            Assert.IsTrue(word.Equals("Goodbye\n"));
+ 
+             cvsStream.BaseStream.Close();
+         }
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests/AbstractTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests/AbstractTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests/AbstractTest.cs.cleanups	2008-04-10 10:10:07.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests/AbstractTest.cs	2008-04-10 13:26:48.000000000 -0400
+@@ -45,7 +45,7 @@ using ICSharpCode.SharpCvsLib.Tests.Conf
+ using log4net;
+ 
+ // TODO: Change to internalize helpers (remove)
+-[assembly: log4net.Config.DOMConfigurator(
++[assembly: log4net.Config.XmlConfigurator(
+ ConfigFileExtension="config", Watch=true)]
+ 
+ namespace ICSharpCode.SharpCvsLib.Tests {
+@@ -155,15 +155,15 @@ namespace ICSharpCode.SharpCvsLib.Tests 
+             System.Console.WriteLine (this.settings.Config.LocalPath);
+ 
+             CVSServerConnection connection = new CVSServerConnection ();
+-            Assertion.AssertNotNull ("Should have a connection object.", connection);
++            Assert.IsNotNull (connection, "Should have a connection object.");
+ 
+             ICommand command = new CheckoutModuleCommand (working);
+-            Assertion.AssertNotNull ("Should have a command object.", command);
++            Assert.IsNotNull (command, "Should have a command object.");
+ 
+             try {
+                 connection.Connect (working, this.settings.Config.ValidPassword);
+             } catch (AuthenticationException) {
+-                Assertion.Assert ("Failed to authenticate with server.", true);
++                Assert.IsTrue (true, "Failed to authenticate with server.");
+             }
+ 
+             command.Execute (connection);
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests.build.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests.build
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests.build.cleanups	2004-01-28 07:55:02.000000000 -0500
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests.build	2008-04-10 10:09:33.000000000 -0400
+@@ -10,19 +10,28 @@
+                 define="${compile.define}">                
+             <arg value="${compile.unsafe}" />
+             <arg value="${compile.checked}" />
++            <nowarn>
++                <!-- ignore unused variables -->
++                <warning number="219" />
++                <!-- ignore unused private fields -->
++                <warning number="414" />
++                <!-- ignore unused private methods -->
++                <warning number="169" />
++            </nowarn>
+             <sources>
+-                <includes name="**/*.cs" />
+-                <includes name="../../${name.top-level}/${name.project}/**.cs" />
+-                <includes name="../../${name.top-level}.${name.console}/${name.project}/**.cs" />
+-                <excludes name="../../${name.top-level}/${name.project}/AssemblyInfo.cs" />
+-                <excludes name="../../${name.top-level}.${name.console}/${name.project}/AssemblyInfo.cs" />
++                <include name="**/*.cs" />
++                <include name="../../${name.top-level}/${name.project}/**.cs" />
++                <include name="../../${name.top-level}.${name.console}/${name.project}/**.cs" />
++                <exclude name="../../${name.top-level}/${name.project}/AssemblyInfo.cs" />
++                <exclude name="../../${name.top-level}.${name.console}/${name.project}/AssemblyInfo.cs" />
+             </sources>
+ 
+             <references>
+-                <includes name="System.dll" />            
+-                <includes name="${dir.lib}/${lib.zip}" />
+-                <includes name="${dir.lib.ext}/${lib.log4net}" />
+-                <includes name="${dir.lib.ext}/${lib.nunit}" />
++                <include name="System.dll" />            
++                <include name="System.Configuration.dll" />
++                <include name="${dir.lib}/${lib.zip}" />
++                <include name="${dir.lib.ext}/${lib.log4net}" />
++                <include name="${dir.lib.ext}/${lib.nunit}" />
+             </references>
+         </csc>
+     </target>
+@@ -35,23 +44,32 @@
+                 
+             <arg value="${compile.unsafe}" />
+             <arg value="${compile.checked}" />
++            <nowarn>
++                <!-- ignore unused variables -->
++                <warning number="219" />
++                <!-- ignore unused private fields -->
++                <warning number="414" />
++                <!-- ignore unused private methods -->
++                <warning number="169" />
++            </nowarn>
+             <sources>
+-                <includes name="**/*.cs" />
+-                <includes name="../../${name.top-level}/${name.project}/**.cs" />
+-                <includes name="../../${name.top-level}.${name.console}/${name.project}/**.cs" />
+-                <excludes name="../../${name.top-level}/${name.project}/AssemblyInfo.cs" />
+-                <excludes name="../../${name.top-level}.${name.console}/${name.project}/AssemblyInfo.cs" />
+-                <excludes name="Commands/*.cs" />
+-                <excludes name="Console/Commands/*.cs"/>
+-                <excludes name="FileHandler/*.cs" />
+-                <excludes name="FileSystem/ManagerTest.cs" />
++                <include name="**/*.cs" />
++                <include name="../../${name.top-level}/${name.project}/**.cs" />
++                <include name="../../${name.top-level}.${name.console}/${name.project}/**.cs" />
++                <exclude name="../../${name.top-level}/${name.project}/AssemblyInfo.cs" />
++                <exclude name="../../${name.top-level}.${name.console}/${name.project}/AssemblyInfo.cs" />
++                <exclude name="Commands/*.cs" />
++                <exclude name="Console/Commands/*.cs"/>
++                <exclude name="FileHandler/*.cs" />
++                <exclude name="FileSystem/ManagerTest.cs" />
+             </sources>
+ 
+             <references>
+-                <includes name="System.dll" />            
+-                <includes name="${dir.lib}/${lib.zip}" />
+-                <includes name="${dir.lib.ext}/${lib.log4net}" />
+-                <includes name="${dir.lib.ext}/${lib.nunit}" />
++                <include name="System.dll" />            
++                <include name="System.Configuration.dll" />
++                <include name="${dir.lib}/${lib.zip}" />
++                <include name="${dir.lib.ext}/${lib.log4net}" />
++                <include name="${dir.lib.ext}/${lib.nunit}" />
+             </references>
+         </csc>
+     </target>
+@@ -76,8 +94,8 @@
+     <target name="tests-to-html" failonerror="false">
+         <nunit2report out="${dir.bin}/tests/index.html" >
+             <fileset>
+-                <includes name="${dir.bin}/tests/${name.top-level}.${name.project}.${name.tests}-sample.dll-results.xml" />
++                <include name="${dir.bin}/tests/${name.top-level}.${name.project}.${name.tests}-sample.dll-results.xml" />
+             </fileset>
+         </nunit2report>
+     </target>
+-</project>
+\ No newline at end of file
++</project>
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests/Config/SharpCvsLibTestsConfig.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests/Config/SharpCvsLibTestsConfig.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests/Config/SharpCvsLibTestsConfig.cs.cleanups	2003-11-27 21:49:20.000000000 -0500
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Tests/Config/SharpCvsLibTestsConfig.cs	2008-04-10 10:09:33.000000000 -0400
+@@ -201,8 +201,9 @@ namespace ICSharpCode.SharpCvsLib.Tests.
+             SharpCvsLibTestsConfig config;
+             try {
+                 config =
+-                    (SharpCvsLibTestsConfig)ConfigurationSettings.GetConfig
+-                    (SharpCvsLibTestsConfigHandler.APP_CONFIG_SECTION);
++                    // (SharpCvsLibTestsConfig)ConfigurationSettings.GetConfig
++                    // (SharpCvsLibTestsConfigHandler.APP_CONFIG_SECTION);
++                    (SharpCvsLibTestsConfig) System.Configuration.ConfigurationManager.GetSection (SharpCvsLibTestsConfigHandler.APP_CONFIG_SECTION);
+ 
+                 if (null == config) {
+                     config = new SharpCvsLibTestsConfig ();
+diff -up sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Util/DateParserTest.cs.cleanups sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Util/DateParserTest.cs
+--- sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Util/DateParserTest.cs.cleanups	2008-04-10 13:22:47.000000000 -0400
++++ sharpcvslib-0.35/src/src/ICSharpCode.Tests/SharpCvsLib/Util/DateParserTest.cs	2008-04-10 13:24:02.000000000 -0400
+@@ -98,9 +98,9 @@ namespace ICSharpCode.SharpCvsLib.Util {
+                                     int year,
+                                     int month,
+                                     int day) {
+-            Assertion.AssertEquals (year, date.Year);
+-            Assertion.AssertEquals (month, date.Month);
+-            Assertion.AssertEquals (day, date.Day);
++            Assert.AreEqual (year, date.Year);
++            Assert.AreEqual (month, date.Month);
++            Assert.AreEqual (day, date.Day);
+         }
+         private void AssertDateEquals (DateTime date,
+                                     int year,
+@@ -109,12 +109,12 @@ namespace ICSharpCode.SharpCvsLib.Util {
+                                     int hour,
+                                     int minute,
+                                     int second) {
+-            Assertion.AssertEquals (year, date.Year);
+-            Assertion.AssertEquals (month, date.Month);
+-            Assertion.AssertEquals (day, date.Day);
+-            Assertion.AssertEquals (hour, date.Hour);
+-            Assertion.AssertEquals (minute, date.Minute);
+-            Assertion.AssertEquals (second, date.Second);
++            Assert.AreEqual (year, date.Year);
++            Assert.AreEqual (month, date.Month);
++            Assert.AreEqual (day, date.Day);
++            Assert.AreEqual (hour, date.Hour);
++            Assert.AreEqual (minute, date.Minute);
++            Assert.AreEqual (second, date.Second);
+         }
+     }
+ }
