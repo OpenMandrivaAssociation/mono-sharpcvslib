@@ -1,0 +1,8 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+
+Name: sharpcvslib
+Description: sharpcvslib - Client CVS library written in C#
+Version: 0.35
+Libs: -r:${libdir}/mono/sharpcvslib/ICSharpCode.SharpCvsLib.dll -r:${libdir}/mono/sharpcvslib/ICSharpCode.SharpCvsLib-Tests.dll -r:${libdir}/mono/sharpcvslib/ICSharpCode.SharpCvsLib.Tests-sample.dll

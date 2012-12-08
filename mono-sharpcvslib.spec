@@ -1,6 +1,6 @@
 Name:		mono-sharpcvslib
 Version:	0.35
-Release:	%mkrel 3
+Release:	%mkrel 4
 Summary:	Client cvs library written in C#
 URL:		http://sharpcvslib.sourceforge.net/
 # Exception: Permission is given to use this library in commercial closed-source applications
@@ -64,14 +64,14 @@ nant -buildfile:SharpCvsLib.build netdoc ||:
 
 
 %install
-%{__rm} -rf %{buildroot}
-%{__mkdir_p} %{buildroot}/%_datadir/pkgconfig
-cp %{S:1} %{buildroot}/%_datadir/pkgconfig
-%{__mkdir_p} %{buildroot}/%_prefix/lib/mono/gac/
-gacutil -i src/bin/cvs.exe -f -package sharpcvslib -root %{buildroot}/%_prefix/lib/
-gacutil -i src/bin/ICSharpCode.SharpCvsLib.dll -f -package sharpcvslib -root %{buildroot}/%_prefix/lib
-gacutil -i src/bin/ICSharpCode.SharpCvsLib.Tests.dll -f -package sharpcvslib -root %{buildroot}/%_prefix/lib
-gacutil -i src/bin/ICSharpCode.SharpCvsLib.Tests-sample.dll -f -package sharpcvslib -root %{buildroot}/%_prefix/lib
+%{__rm} -rf $RPM_BUILD_ROOT
+%{__mkdir_p} $RPM_BUILD_ROOT/%_datadir/pkgconfig
+cp %{S:1} $RPM_BUILD_ROOT/%_datadir/pkgconfig
+%{__mkdir_p} $RPM_BUILD_ROOT/%_prefix/lib/mono/gac/
+gacutil -i src/bin/cvs.exe -f -package sharpcvslib -root ${RPM_BUILD_ROOT}/%_prefix/lib/
+gacutil -i src/bin/ICSharpCode.SharpCvsLib.dll -f -package sharpcvslib -root ${RPM_BUILD_ROOT}/%_prefix/lib
+gacutil -i src/bin/ICSharpCode.SharpCvsLib.Tests.dll -f -package sharpcvslib -root ${RPM_BUILD_ROOT}/%_prefix/lib
+gacutil -i src/bin/ICSharpCode.SharpCvsLib.Tests-sample.dll -f -package sharpcvslib -root ${RPM_BUILD_ROOT}/%_prefix/lib
 
 # Cleanup docs
 %{__sed} -i 's/\r//' src/doc/api/msdn/SharpCvsLib.log
@@ -83,7 +83,7 @@ iconv -f iso-8859-1 -t utf-8 -o src/doc/api/msdn/tree.js{.utf8,}
 mv src/doc/api/msdn/tree.js{.utf8,}
 
 %clean
-%{__rm} -rf %{buildroot}
+%{__rm} -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
@@ -97,4 +97,15 @@ mv src/doc/api/msdn/tree.js{.utf8,}
 %defattr(-,root,root,-)
 %doc src/doc/api/
 %_datadir/pkgconfig/sharpcvslib.pc
+
+
+
+%changelog
+* Wed May 04 2011 Oden Eriksson <oeriksson@mandriva.com> 0.35-2mdv2011.0
++ Revision: 666481
+- mass rebuild
+
+* Thu Oct 14 2010 Götz Waschk <waschk@mandriva.org> 0.35-1mdv2011.0
++ Revision: 585666
+- import mono-sharpcvslib
 
