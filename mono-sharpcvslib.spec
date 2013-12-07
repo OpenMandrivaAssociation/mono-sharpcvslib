@@ -1,7 +1,7 @@
 Summary:	Client cvs library written in C sharp
 Name:		mono-sharpcvslib
 Version:	0.35
-Release:	5
+Release:	6
 # Exception: Permission is given to use this library in commercial closed-source applications
 # See: README.txt
 License:	GPLv2+ with exceptions
