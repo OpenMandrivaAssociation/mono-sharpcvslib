@@ -18,6 +18,7 @@ BuildRequires:	unzip
 BuildRequires:	pkgconfig(log4net)
 BuildRequires:	pkgconfig(nant)
 BuildRequires:	pkgconfig(nunit22)
+BuildRequires:	pkgconfig(mono)
 
 %description
 Gives C sharp projects the ability to communicate with a CVS server.
