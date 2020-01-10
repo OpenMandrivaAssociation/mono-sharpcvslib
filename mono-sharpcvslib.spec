@@ -34,7 +34,7 @@ Gives C sharp projects the ability to communicate with a CVS server.
 %prep
 %setup -q -c -n sharpcvslib-%{version}
 # We need this to compile.
-%apply_patches
+%autopatch -p1
 # Get rid of the binary dlls
 rm -rf src/lib/*
 rm -rf src/tools/nant/*
