@@ -6,7 +6,7 @@ Release:	13
 # See: README.txt
 License:	GPLv2+ with exceptions
 Group:		Development/Other
-Url:		http://sharpcvslib.sourceforge.net/
+Url:		https://sharpcvslib.sourceforge.net/
 # Upstream Source is here: http://downloads.sourceforge.net/sharpcvslib/SharpCvsLib-0.35.3721.507-src.zip
 # Unfortunately, they use windows separators. This is the same thing, just rezipped with unix separators.
 Source0:	SharpCvsLib-0.35.3721.507-src-unix.zip
